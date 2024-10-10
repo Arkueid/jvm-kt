@@ -13,5 +13,5 @@ fun main(args: Array<String>) {
 }
 
 fun startJvm(cmd: Cmd) {
-    println("classpath: ${cmd.cpOptions}, class: ${cmd.`class`}, args: ${cmd.args?.joinToString(", ", prefix = "[", postfix = "]")}")
+    println("classpath: ${cmd.cpOptions}, class: ${cmd.`class`}, args: ${cmd.args.joinToString(", ", prefix = "[", postfix = "]")}")
 }
