@@ -13,7 +13,6 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.6")
     compileOnly("org.jcommander:jcommander:2.0")
 }
 
