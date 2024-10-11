@@ -24,14 +24,15 @@ kotlin {
 }
 
 tasks.jar {
+    val currentChapter = "ch03"
     manifest {
-        attributes["Main-Class"] = "ch02.MainKt"
+        attributes["Main-Class"] = "$currentChapter.MainKt"
     }
 
     // 排除掉重复文件
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    from(sourceSets.main.get().allSource.matching { include("ch02/**") })
+    from(sourceSets.main.get().allSource.matching { include("$currentChapter/**") })
 
     // 将依赖一并打包如 jar 中
     configurations["compileClasspath"].forEach {file: File->
