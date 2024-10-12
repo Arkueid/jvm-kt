@@ -2,7 +2,9 @@ package ch03.classfile
 
 @OptIn(ExperimentalUnsignedTypes::class)
 class ClassFile {
-    //magic uint32
+    // 文件最开头的魔数，由于识别 .class 文件
+    // val magic: UInt = 0xcafebabe // Cafe Babe~
+
     private var _minorVersion: UShort = 0U
     val minorVersion get() = _minorVersion
 
@@ -12,6 +14,7 @@ class ClassFile {
     private var _constantPool: ConstantPool? = null
     val constantPool get() = _constantPool
 
+    // 访问标志位，16位的 bit mask，每一位可以表示：文件是类还是接口、访问级别是public还是private...
     private var _accessFlags: UShort = 0U
     val accessFlags get() = _accessFlags
 
@@ -35,8 +38,11 @@ class ClassFile {
         readAndCheckVersion(reader)
         _constantPool = readConstantPool(reader)
         _accessFlags = reader.readUint16()
+        // 该类在常量池的索引，用于获取类名等信息
         _thisClass = reader.readUint16()
+        // 超类在常量池中的索引，只可能在java.lang.Object中为0
         _superClass = reader.readUint16()
+        // 接口的常量池索引，给出该类所实现的接口的名字
         _interfaces = reader.readUint16s()
         _fields = readMembers(reader, _constantPool!!)
         _methods = readMembers(reader, _constantPool!!)
@@ -56,11 +62,28 @@ class ClassFile {
     }
 
     private fun readAndCheckMagic(reader: ClassReader) {
-        TODO()
+        val magic = reader.readUint32()
+        if (magic.toLong() != 0xCAFEBABE) {
+            throw RuntimeException("java.class.ClassFormatError: magic!")
+        }
     }
 
     private fun readAndCheckVersion(reader: ClassReader) {
-        TODO()
+        _minorVersion = reader.readUint16()
+        _majorVersion = reader.readUint16()
+        when (_majorVersion.toInt()) {
+            45 -> {
+                return
+            }
+
+            46, 47, 48, 49, 50, 51, 52 -> {
+                if (_minorVersion.toInt() == 0) {
+                    return
+                }
+            }
+        }
+
+        throw RuntimeException("java.lang.UnsupportedClassVersionError!")
     }
 
     val className: String
@@ -79,7 +102,7 @@ class ClassFile {
 
     val interfaceNames: Array<String>
         get() {
-            TODO()
+            return Array<String>(_interfaces!!.size) { _constantPool!!.getClassName(_interfaces!![it]) }
         }
 
     companion object {
@@ -100,13 +123,6 @@ class ClassFile {
 }
 
 
-class ConstantPool {
-    fun getClassName(uShort: UShort): String {
-        TODO()
-    }
-}
-
-class MemberInfo
 class AttributeInfo
 
 class ParseClassFileResult(
