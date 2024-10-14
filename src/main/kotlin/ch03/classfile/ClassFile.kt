@@ -122,9 +122,6 @@ class ClassFile {
     }
 }
 
-
-class AttributeInfo
-
 class ParseClassFileResult(
     var classFile: ClassFile? = null,
     var error: Throwable? = null,

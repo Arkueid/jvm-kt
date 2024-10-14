@@ -4,6 +4,7 @@ import ch02.classpath.Classpath
 import ch02.classpath.String
 import ch02.classpath.parse
 import ch02.classpath.readClass
+import java.io.File
 
 fun main(args: Array<String>) {
     val cmd = parseCmd(args)
@@ -35,4 +36,8 @@ fun startJvm(cmd: Cmd) {
     }
 
     println("class data: ${result.data?.joinToString()}")
+
+    File("Object.class").outputStream().use {
+        it.write(result.data!!)
+    }
 }
