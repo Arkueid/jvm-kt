@@ -50,16 +50,14 @@ class ClassFile {
     }
 
     private fun readAttributes(reader: ClassReader, pool: ConstantPool): Array<AttributeInfo> {
-        TODO()
+        return AttributeInfo.readAttributes(reader, pool)
     }
 
     private fun readMembers(reader: ClassReader, pool: ConstantPool): Array<MemberInfo> {
-        TODO("Not yet implemented")
+        return MemberInfo.readMembers(reader, pool)
     }
 
-    private fun readConstantPool(reader: ClassReader): ConstantPool {
-        TODO("Not yet implemented")
-    }
+    private fun readConstantPool(reader: ClassReader): ConstantPool = ConstantPool.readConstantPool(reader)
 
     private fun readAndCheckMagic(reader: ClassReader) {
         val magic = reader.readUint32()
@@ -102,7 +100,7 @@ class ClassFile {
 
     val interfaceNames: Array<String>
         get() {
-            return Array<String>(_interfaces!!.size) { _constantPool!!.getClassName(_interfaces!![it]) }
+            return Array(_interfaces!!.size) { _constantPool!!.getClassName(_interfaces!![it]) }
         }
 
     companion object {

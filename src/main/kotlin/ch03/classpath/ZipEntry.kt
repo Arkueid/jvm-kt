@@ -1,5 +1,6 @@
 package ch03.classpath
 
+import java.io.InputStreamReader
 import java.nio.file.Paths
 import java.util.zip.ZipFile
 

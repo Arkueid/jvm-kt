@@ -1,6 +1,6 @@
 package ch03.classfile
 
-class LineNumberEntry(
+class LineNumberTableEntry(
     var startPc: UShort,
     var lineNumber: UShort,
 )

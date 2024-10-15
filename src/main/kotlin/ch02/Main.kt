@@ -1,9 +1,6 @@
 package ch02
 
 import ch02.classpath.Classpath
-import ch02.classpath.String
-import ch02.classpath.parse
-import ch02.classpath.readClass
 
 fun main(args: Array<String>) {
     val cmd = parseCmd(args)
@@ -17,7 +14,6 @@ fun main(args: Array<String>) {
     }
 }
 
-@OptIn(ExperimentalStdlibApi::class)
 fun startJvm(cmd: Cmd) {
     val cp = Classpath.parse(cmd.XjreOption, cmd.cpOptions)
     println(

@@ -5,7 +5,10 @@ import kotlin.UShortArray
 /**
  * 默认为大端存储
  */
-class ClassReader(var data: ByteArray) {
+@OptIn(ExperimentalUnsignedTypes::class)
+class ClassReader(raw: ByteArray) {
+    val data = raw.asUByteArray()
+
     private var currentPosition: Int = 0
 
     fun readUint8(): UByte {
@@ -13,25 +16,28 @@ class ClassReader(var data: ByteArray) {
     }
 
     fun readUint16(): UShort {
-        val b1 = data[currentPosition++].toUInt()
-        val b2 = data[currentPosition++].toUInt()
+        val b1 = data[currentPosition++].toUInt() and 0xffu
+        val b2 = data[currentPosition++].toUInt() and 0xffu
         return ((b1 shl 8) or b2).toUShort()
     }
 
     fun readUint32(): UInt {
-        val b1 = data[currentPosition++].toUInt()
-        val b2 = data[currentPosition++].toUInt()
-        val b3 = data[currentPosition++].toUInt()
-        val b4 = data[currentPosition++].toUInt()
+        // 读入的为带符号 byte，需要去除高位符号位
+        val b1 = data[currentPosition++].toUInt() and 0xffu
+        val b2 = data[currentPosition++].toUInt() and 0xffu
+        val b3 = data[currentPosition++].toUInt() and 0xffu
+        val b4 = data[currentPosition++].toUInt() and 0xffu
 
         return (b1 shl 24) or (b2 shl 16) or (b3 shl 8) or b4
     }
+
+//    fun UInt.test() = this.apply { println(String.format("%h", this)) }
 
     fun readUint64(): ULong {
         var uLong = 0UL
         var shift = 64 - 8
         repeat(8) {
-            uLong = uLong or (data[currentPosition++].toULong() shl shift)
+            uLong = uLong or ((data[currentPosition++].toULong() and 0xffuL) shl shift)
             shift -= 8
         }
         return uLong
@@ -50,9 +56,7 @@ class ClassReader(var data: ByteArray) {
         return uShortArray
     }
 
-    fun readBytes(n: Int): ByteArray {
-        val byteArray = data.sliceArray(currentPosition..n + currentPosition - 1)
-        currentPosition += n
-        return byteArray
+    fun readBytes(n: Int): UByteArray {
+        return data.sliceArray(currentPosition until currentPosition + n).also { currentPosition += n }
     }
 }

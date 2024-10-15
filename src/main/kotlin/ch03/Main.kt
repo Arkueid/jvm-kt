@@ -1,10 +1,7 @@
 package ch03
 
-import ch02.classpath.Classpath
-import ch02.classpath.String
-import ch02.classpath.parse
-import ch02.classpath.readClass
-import java.io.File
+import ch03.classpath.Classpath
+import ch03.classfile.ClassFile
 
 fun main(args: Array<String>) {
     val cmd = parseCmd(args)
@@ -18,26 +15,45 @@ fun main(args: Array<String>) {
     }
 }
 
-@OptIn(ExperimentalStdlibApi::class)
 fun startJvm(cmd: Cmd) {
     val cp = Classpath.parse(cmd.XjreOption, cmd.cpOptions)
-    println(
-        "classpath: ${cp.String()} " +
-                "class: ${cmd.`class`} " +
-                "args: ${cmd.args.joinToString(", ", prefix = "[", postfix = "]")}"
-    )
 
     val className = cmd.`class`!!.replace(".", "/")
-    val result = cp.readClass(className)
+    val cf = loadClass(className, cp)
+    println(cmd.`class`)
+    printClassInfo(cf)
+}
 
-    if (result.error != null) {
-        println("Could not find or load main class ${cmd.`class`}")
-        return throw RuntimeException(result.error)
+fun loadClass(className: String, cp: Classpath): ClassFile {
+    val cpResult = cp.readClass(className)
+    if (cpResult.error != null) {
+        throw RuntimeException(cpResult.error)
     }
 
-    println("class data: ${result.data?.joinToString()}")
+    val cfResult = ClassFile.parse(cpResult.data!!)
+    if (cfResult.error != null) {
+        throw RuntimeException(cfResult.error)
+    }
 
-    File("Object.class").outputStream().use {
-        it.write(result.data!!)
+    return cfResult.classFile!!
+}
+
+@OptIn(ExperimentalStdlibApi::class)
+fun printClassInfo(cf: ClassFile) {
+    println("version: ${cf.majorVersion}.${cf.minorVersion}")
+    println("constants count: ${cf.constantPool!!.size}")
+    println("access flags: 0x${cf.accessFlags.toHexString()}")
+    println("this class: ${cf.className}")
+    println("super class: ${cf.superClassName}")
+    println("interfaces: ${cf.interfaceNames.joinToString(", ", prefix = "[", postfix = "]")}")
+    println("fields count: ${cf.fields!!.size}")
+
+    cf.fields!!.forEach {
+        println("   ${it.name}")
+    }
+
+    println("methods count: ${cf.methods!!.size}")
+    cf.methods!!.forEach {
+        println("   ${it.name}")
     }
 }

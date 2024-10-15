@@ -55,11 +55,7 @@ class Classpath {
 
 
     private fun parseUserClasspath(cpOption: String) {
-        val cp = if (cpOption.isEmpty()) {
-            "."
-        } else {
-            cpOption
-        }
+        val cp = cpOption.ifEmpty { "." }
         userClasspathEntry = Entry.create(cp)
     }
 

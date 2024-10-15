@@ -5,83 +5,82 @@ import java.nio.file.Files
 import kotlin.io.path.Path
 
 class Classpath {
-    var bootClassEntry: Entry? = null
+    private var bootClassEntry: Entry? = null
 
-    var extClassEntry: Entry? = null
-    var userClasspathEntry: Entry? = null
+    private var extClassEntry: Entry? = null
+    private var userClasspathEntry: Entry? = null
 
-    companion object
+    companion object {
+        @JvmStatic
+        // 从命令行中解析 classpath
+        fun parse(jreOption: String, cpOption: String): Classpath {
+            val cp = Classpath()
+            cp.parseBootAndExtClasspath(jreOption)
+            cp.parseUserClasspath(cpOption)
 
-}
+            return cp
+        }
 
-@JvmStatic
-// 从命令行中解析 classpath
-fun Classpath.Companion.parse(jreOption: String, cpOption: String): Classpath {
-    val cp = Classpath()
-    cp.parseBootAndExtClasspath(jreOption)
-    cp.parseUserClasspath(cpOption)
+        @JvmStatic
+        private fun getJreDir(jreOption: String): String {
+            if (jreOption.isNotEmpty() && Files.exists(Path(jreOption))) {
+                return jreOption
+            }
 
-    return cp
-}
+            if (Files.exists(Path("./jre"))) {
+                return "./jre"
+            }
 
-private fun Classpath.parseBootAndExtClasspath(jreOption: String) {
-    val jreDir = getJreDir(jreOption)
+            System.getenv("JAVA_HOME")?.let {
+                if (it.isNotEmpty()) {
+                    return "$it${File.separator}jre"
+                }
+            }
 
-    val separator = File.separator
-    // jre/lib/*
-    val jreLibPath = "$jreDir${separator}lib$separator*"
-    bootClassEntry = WildCardEntry(jreLibPath)
-
-    // jre/lib/ext/*
-    val jreExtPath = "$jreDir${separator}lib${separator}ext$separator*"
-    extClassEntry = WildCardEntry(jreExtPath)
-}
-
-fun Classpath.getJreDir(jreOption: String): String {
-    if (jreOption.isNotEmpty() && Files.exists(Path(jreOption))) {
-        return jreOption
-    }
-
-    if (Files.exists(Path("./jre"))) {
-        return "./jre"
-    }
-
-    System.getenv("JAVA_HOME")?.let {
-        if (it.isNotEmpty()) {
-            return "$it${File.separator}jre"
+            throw RuntimeException("Can not find jre folder")
         }
     }
 
-    throw RuntimeException("Can not find jre folder")
-}
+    private fun parseBootAndExtClasspath(jreOption: String) {
+        val jreDir = getJreDir(jreOption)
 
+        val separator = File.separator
+        // jre/lib/*
+        val jreLibPath = "$jreDir${separator}lib$separator*"
+        println(jreLibPath)
+        bootClassEntry = WildCardEntry(jreLibPath)
 
-private fun Classpath.parseUserClasspath(cpOption: String) {
-    val cp = if (cpOption.isEmpty()) {
-        "."
-    } else {
-        cpOption
+        // jre/lib/ext/*
+        val jreExtPath = "$jreDir${separator}lib${separator}ext$separator*"
+        extClassEntry = WildCardEntry(jreExtPath)
     }
-    userClasspathEntry = Entry.create(cp)
-}
 
-fun Classpath.readClass(className: String): ReadClassResult {
-    val classNameWithExt = "${className}.class"
+    private fun parseUserClasspath(cpOption: String) {
+        val cp = cpOption.ifEmpty { "." }
+        userClasspathEntry = Entry.create(cp)
+    }
 
-    bootClassEntry!!.readClass(classNameWithExt).let {
-        if (it.error == null) {
-            return it
+    fun readClass(className: String): ReadClassResult {
+        val classNameWithExt = "${className}.class"
+
+        bootClassEntry!!.readClass(classNameWithExt).let {
+            if (it.error == null) {
+                return it
+            }
         }
-    }
 
-    extClassEntry!!.readClass(classNameWithExt).let {
-        if (it.error == null) {
-            return it
+        extClassEntry!!.readClass(classNameWithExt).let {
+            if (it.error == null) {
+                return it
+            }
         }
+
+        return userClasspathEntry!!.readClass(classNameWithExt)
     }
 
-    return userClasspathEntry!!.readClass(classNameWithExt)
+    fun String(): String = userClasspathEntry!!.String()
 }
 
-fun Classpath.String(): String = userClasspathEntry!!.String()
+
+
 
