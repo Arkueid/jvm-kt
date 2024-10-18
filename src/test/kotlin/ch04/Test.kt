@@ -1,6 +1,6 @@
 package ch04
 
-import ch04.rtdata.KvmFrame
+import ch05.rtdata.KvmFrame
 import ch04.rtdata.KvmLocalVars
 import ch04.rtdata.KvmOperandStack
 
