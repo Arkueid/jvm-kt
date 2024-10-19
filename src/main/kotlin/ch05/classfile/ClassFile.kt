@@ -22,15 +22,15 @@ class ClassFile {
 
     private var _superClass: UShort = 0U
 
-    private var _interfaces: UShortArray? = null
+    private var _interfaces: UShortArray? = UShortArray(0)
 
-    private var _fields: Array<MemberInfo>? = null
+    private var _fields: Array<MemberInfo> = emptyArray()
     val fields get() = _fields
 
-    private var _methods: Array<MemberInfo>? = null
+    private var _methods: Array<MemberInfo> = emptyArray()
     val methods get() = _methods
 
-    private var _attributes: Array<AttributeInfo>? = null
+    private var _attributes: Array<AttributeInfo> = emptyArray()
     val attributes get() = _attributes
 
     private fun read(reader: ClassReader) {

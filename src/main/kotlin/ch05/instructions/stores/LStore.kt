@@ -1,6 +1,6 @@
 package ch05.instructions.stores
 
-import ch04.rtdata.KvmFrame
+import ch05.rtdata.KvmFrame
 import ch05.instructions.base.Index8Instruction
 import ch05.instructions.base.NoOperandsInstruction
 
@@ -9,31 +9,31 @@ private fun lStore(frame: KvmFrame, index: UInt) {
     frame.localVars.setLong(index, value)
 }
 
-class LStore : Index8Instruction() {
+class LSTORE : Index8Instruction() {
     override fun execute(frame: KvmFrame) {
-        lStore(frame, index.toUInt())
+        lStore(frame, index)
     }
 }
 
-class LStore_0 : NoOperandsInstruction() {
+class LSTORE_0 : NoOperandsInstruction() {
     override fun execute(frame: KvmFrame) {
         lStore(frame, 0u)
     }
 }
 
-class LStore_1 : NoOperandsInstruction() {
+class LSTORE_1 : NoOperandsInstruction() {
     override fun execute(frame: KvmFrame) {
         lStore(frame, 1u)
     }
 }
 
-class LStore_2 : NoOperandsInstruction() {
+class LSTORE_2 : NoOperandsInstruction() {
     override fun execute(frame: KvmFrame) {
         lStore(frame, 2u)
     }
 }
 
-class LStore_3 : NoOperandsInstruction() {
+class LSTORE_3 : NoOperandsInstruction() {
     override fun execute(frame: KvmFrame) {
         lStore(frame, 3u)
     }

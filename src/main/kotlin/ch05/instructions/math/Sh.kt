@@ -57,3 +57,13 @@ class LSHR : NoOperandsInstruction() {
     }
 
 }
+
+class LUSHR : NoOperandsInstruction() {
+    override fun execute(frame: KvmFrame) = frame.operandStack.run {
+        val v2 = popInt()
+        val v1 = popLong()
+        val result = v1 ushr (v2 and 0x3f)
+        pushLong(result)
+    }
+
+}

@@ -6,7 +6,7 @@ import ch05.rtdata.KvmFrame
 /**
  * 交换操作数栈顶的两个元素
  */
-class Swap : NoOperandsInstruction() {
+class SWAP : NoOperandsInstruction() {
     override fun execute(frame: KvmFrame) = frame.operandStack.run {
         val v0 = popSlot()
         val v1 = popSlot()

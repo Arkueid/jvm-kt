@@ -48,12 +48,11 @@ interface AttributeInfo {
     }
 }
 
-@OptIn(ExperimentalUnsignedTypes::class)
 class UnparsedAttribute(
     var name: String,
     private var length: Int,
 ) : AttributeInfo {
-    private var info: UByteArray? = null
+    private var info: ByteArray = ByteArray(0)
 
     override fun readInfo(reader: ClassReader) {
         info = reader.readBytes(length)
@@ -107,7 +106,7 @@ class CodeAttribute(
     // 局部变量表大小
     var maxLocals: UShort = 0U
 
-    var code: UByteArray? = null
+    var code: ByteArray = ByteArray(0)
 
     lateinit var exceptionTable: Array<ExceptionTableEntry>
 

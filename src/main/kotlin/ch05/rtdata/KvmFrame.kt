@@ -1,6 +1,7 @@
 package ch05.rtdata
 
 class KvmFrame(
+    val thread: KvmThread,
     maxLocals: UInt,
     maxStack: UInt,
 ) {
@@ -9,10 +10,9 @@ class KvmFrame(
 
     var lower: KvmFrame? = null
 
-    lateinit var thread: KvmThread
-
-    fun setNextPC(pc: Int) {
-        // TODO
-        thread.pc = pc
+    private var _nextPC: Int = 0
+    var nextPC get() = _nextPC
+        set(value) {
+        _nextPC = value
     }
 }

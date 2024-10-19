@@ -1,13 +1,14 @@
 package ch04
 
 import ch05.rtdata.KvmFrame
-import ch04.rtdata.KvmLocalVars
-import ch04.rtdata.KvmOperandStack
+import ch05.rtdata.KvmLocalVars
+import ch05.rtdata.KvmOperandStack
+import ch05.rtdata.KvmThread
 
 object Test {
     @JvmStatic
     fun main(args: Array<String>) {
-        val frame = KvmFrame(100u, 100u)
+        val frame = KvmFrame(KvmThread(), 100u, 100u)
         testLocalVars(frame.localVars)
         testOperandStack(frame.operandStack)
     }

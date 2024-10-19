@@ -23,7 +23,7 @@ class KvmStack(private val maxSize: UInt) {
         ret.lower = null
         size--
 
-        return top
+        return ret
     }
 
     val top: KvmFrame

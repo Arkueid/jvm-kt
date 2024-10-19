@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.ir.backend.js.compile
-
 plugins {
     kotlin("jvm") version "2.0.10"
 }
@@ -24,7 +22,7 @@ kotlin {
 }
 
 tasks.jar {
-    val currentChapter = "ch04"
+    val currentChapter = "ch05"
     manifest {
         attributes["Main-Class"] = "$currentChapter.MainKt"
     }

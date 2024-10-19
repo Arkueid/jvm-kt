@@ -6,8 +6,7 @@ import kotlin.UShortArray
  * 默认为大端存储
  */
 @OptIn(ExperimentalUnsignedTypes::class)
-class ClassReader(raw: ByteArray) {
-    val data = raw.asUByteArray()
+class ClassReader(private val data: ByteArray) {
 
     private var currentPosition: Int = 0
 
@@ -56,7 +55,7 @@ class ClassReader(raw: ByteArray) {
         return uShortArray
     }
 
-    fun readBytes(n: Int): UByteArray {
+    fun readBytes(n: Int): ByteArray {
         return data.sliceArray(currentPosition until currentPosition + n).also { currentPosition += n }
     }
 }

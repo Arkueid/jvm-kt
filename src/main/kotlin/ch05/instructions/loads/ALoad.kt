@@ -4,38 +4,38 @@ import ch05.rtdata.KvmFrame
 import ch05.instructions.base.Index8Instruction
 import ch05.instructions.base.NoOperandsInstruction
 
-private fun iLoad(frame: KvmFrame, index: UInt) {
+private fun aLoad(frame: KvmFrame, index: UInt) {
     val val1 = frame.localVars.getInt(index)
     frame.operandStack.pushInt(val1)
 }
 
-class ILOAD : Index8Instruction() {
+class ALOAD : Index8Instruction() {
     override fun execute(frame: KvmFrame) {
-        iLoad(frame, index)
+        aLoad(frame, index)
     }
 }
 
-class ILOAD_0 : NoOperandsInstruction() {
+class ALOAD_0 : NoOperandsInstruction() {
     override fun execute(frame: KvmFrame) {
-        iLoad(frame, 0u)
+        aLoad(frame, 0u)
     }
 }
 
-class ILOAD_1 : NoOperandsInstruction() {
+class ALOAD_1 : NoOperandsInstruction() {
     override fun execute(frame: KvmFrame) {
-        iLoad(frame, 1u)
+        aLoad(frame, 1u)
     }
 }
 
-class ILOAD_2 : NoOperandsInstruction() {
+class ALOAD_2 : NoOperandsInstruction() {
     override fun execute(frame: KvmFrame) {
-        iLoad(frame, 2u)
+        aLoad(frame, 2u)
     }
 }
 
-class ILOAD_3 : NoOperandsInstruction() {
+class ALOAD_3 : NoOperandsInstruction() {
     override fun execute(frame: KvmFrame) {
-        iLoad(frame, 3u)
+        aLoad(frame, 3u)
     }
 }
 

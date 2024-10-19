@@ -84,7 +84,7 @@ class ConstantUtf8Info : ConstantInfo {
     override fun readInfo(reader: ClassReader) {
         val length = reader.readUint16().toInt() // 高位不会被符号填充
         val data = reader.readBytes(length)
-        value = data.toByteArray().toString(Charsets.UTF_8)
+        value = data.toString(Charsets.UTF_8)
     }
 }
 

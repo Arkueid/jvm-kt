@@ -9,10 +9,10 @@ import ch05.rtdata.KvmFrame
  * 为局部变量表中的变量增加一个常量值
  */
 class IINC: Index8Instruction() {
-    private var const: Int = 0
+    var const: Int = 0
 
     override fun fetchOperands(reader: BytecodeReader) {
-        index = reader.readUint8()
+        index = reader.readUint8().toUInt()
         const = reader.readInt8().toInt()
     }
 

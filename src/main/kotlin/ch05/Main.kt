@@ -2,6 +2,7 @@ package ch05
 
 import ch05.classpath.Classpath
 import ch05.classfile.ClassFile
+import ch05.classfile.MemberInfo
 
 fun main(args: Array<String>) {
     val cmd = parseCmd(args)
@@ -20,8 +21,22 @@ fun startJvm(cmd: Cmd) {
 
     val className = cmd.`class`!!.replace(".", "/")
     val cf = loadClass(className, cp)
-    println(cmd.`class`)
-    printClassInfo(cf)
+
+    val mainMethod = getMainMethod(cf)
+    if (mainMethod != null) {
+        interpret(mainMethod)
+    } else {
+        throw RuntimeException("Main method not found in class ${cmd.`class`}")
+    }
+}
+
+fun getMainMethod(classFile: ClassFile): MemberInfo? {
+    for (method in classFile.methods) {
+        if (method.name == "main" && method.descriptor == "([Ljava/lang/String;)V") {
+            return method
+        }
+    }
+    return null
 }
 
 fun loadClass(className: String, cp: Classpath): ClassFile {
@@ -36,24 +51,4 @@ fun loadClass(className: String, cp: Classpath): ClassFile {
     }
 
     return cfResult.classFile!!
-}
-
-@OptIn(ExperimentalStdlibApi::class)
-fun printClassInfo(cf: ClassFile) {
-    println("version: ${cf.majorVersion}.${cf.minorVersion}")
-    println("constants count: ${cf.constantPool!!.size}")
-    println("access flags: 0x${cf.accessFlags.toHexString()}")
-    println("this class: ${cf.className}")
-    println("super class: ${cf.superClassName}")
-    println("interfaces: ${cf.interfaceNames.joinToString(", ", prefix = "[", postfix = "]")}")
-    println("fields count: ${cf.fields!!.size}")
-
-    cf.fields!!.forEach {
-        println("   ${it.name}")
-    }
-
-    println("methods count: ${cf.methods!!.size}")
-    cf.methods!!.forEach {
-        println("   ${it.name}")
-    }
 }

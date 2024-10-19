@@ -4,7 +4,7 @@ class KvmOperandStack(
     maxStack: UInt,
 ) {
     private var size: Int = 0
-    private val slots: Array<KvmSlot>
+    val slots: Array<KvmSlot>
 
     init {
         // TODO: to fix

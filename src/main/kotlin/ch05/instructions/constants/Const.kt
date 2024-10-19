@@ -51,6 +51,16 @@ class FCONST_1 : NoOperandsInstruction() {
 }
 
 /**
+ * fconst_2
+ */
+class FCONST_2 : NoOperandsInstruction() {
+    override fun execute(frame: KvmFrame) {
+        frame.operandStack.pushFloat(2.0f)
+    }
+
+}
+
+/**
  * iconst_m1
  */
 class ICONST_M1 : NoOperandsInstruction() {

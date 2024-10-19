@@ -1,0 +1,1 @@
+.\src\test\kotlin\%1\run-test.bat

@@ -3,11 +3,21 @@ package ch05.classfile
 class MemberInfo(
     var cp: ConstantPool,
     var accessFlags: UShort,
-    var nameIndex: UShort,
-    var descriptionIndex: UShort,
-    var attributes: Array<AttributeInfo>? = null,
+    private var nameIndex: UShort,
+    private var descriptionIndex: UShort,
+    private var attributes: Array<AttributeInfo>,
 ) {
 
+
+    val codeAttribute: CodeAttribute?
+        get() {
+            for (attr in attributes) {
+                if (attr is CodeAttribute) {
+                    return attr
+                }
+            }
+            return null
+        }
 
     val name: String get() = cp.getUtf8(nameIndex)
 
