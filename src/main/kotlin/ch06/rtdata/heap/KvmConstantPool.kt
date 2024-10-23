@@ -14,6 +14,12 @@ import ch06.classfile.KvmClass
 
 interface KvmConstant
 
+fun KvmConstant.getInt(): Int = (this as KvmInt).value
+fun KvmConstant.getFloat(): Float = (this as KvmFloat).value
+fun KvmConstant.getDouble(): Double = (this as KvmDouble).value
+fun KvmConstant.getLong(): Long = (this as KvmLong).value
+fun KvmConstant.getString(): String = (this as KvmString).value
+
 class KvmConstantPool {
     var klass: KvmClass
     var constants: Array<KvmConstant?>

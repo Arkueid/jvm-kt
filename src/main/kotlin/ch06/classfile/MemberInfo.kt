@@ -19,6 +19,15 @@ class MemberInfo(
             return null
         }
 
+    val constantValueAttribute: ConstantValueAttribute?
+        get() {
+            for (attr in attributes) {
+                if (attr is ConstantValueAttribute) return attr
+            }
+            return null
+        }
+
+
     val name: String get() = cp.getUtf8(nameIndex)
 
     val descriptor: String get() = cp.getUtf8(descriptionIndex)

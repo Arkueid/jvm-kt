@@ -34,4 +34,19 @@ open class KvmClassMember {
     val isSynthetic = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_SYNTHETIC
     val isAnnotation = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_ANNOTATION
     val isEnum = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_ENUM
+
+    fun isAccessibleTo(d: KvmClass): Boolean {
+        if (isPublic) return true
+
+        val c = klass
+        if (isProtected) {
+            return d == c || d.isSubClassOf(c) || c.packageName == d.packageName
+        }
+
+        if (!isPrivate) {
+            return c.packageName == d.packageName
+        }
+
+        return d == c
+    }
 }

@@ -1,8 +1,8 @@
 package ch06.rtdata.heap
 
-import ch03.classfile.ConstantMemberRefInfo
+import ch06.classfile.ConstantMemberRefInfo
 
-class KvmMemberRef : KvmSymRef() {
+open class KvmMemberRef : KvmSymRef() {
     lateinit var name: String
     lateinit var descriptor: String
 

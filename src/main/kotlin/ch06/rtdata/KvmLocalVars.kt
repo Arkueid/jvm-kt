@@ -2,7 +2,7 @@ package ch06.rtdata
 
 import ch06.rtdata.heap.KvmObject
 
-class KvmLocalVars(
+open class KvmLocalVars(
     maxLocals: UInt,
 ) {
     var slots: Array<KvmSlot>
