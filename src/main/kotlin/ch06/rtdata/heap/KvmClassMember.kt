@@ -16,24 +16,24 @@ open class KvmClassMember {
         descriptor = memberInfo.descriptor
     }
 
-    val isPublic = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_PUBLIC)
-    val isPrivate = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_PRIVATE
-    val isProtected = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_PROTECTED
-    val isStatic = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_STATIC
-    val isFinal = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_FINAL
-    val isSuper = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_SUPER
-    val isSynchronized = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_SYNCHRONIZED
-    val isVolatile = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_VOLATILE
-    val isBridge = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_BRIDGE
-    val isTransient = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_TRANSIENT
-    val isVarargs = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_VARARGS
-    val isNative = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_NATIVE
-    val isInterface = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_INTERFACE
-    val isAbstract = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_ABSTRACT
-    val isStrict = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_STRICT
-    val isSynthetic = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_SYNTHETIC
-    val isAnnotation = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_ANNOTATION
-    val isEnum = 0.toUShort() != accessFlags and KvmAccessFlags.ACC_ENUM
+    val isPublic get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_PUBLIC)
+    val isPrivate get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_PRIVATE)
+    val isProtected get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_PROTECTED)
+    val isStatic get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_STATIC)
+    val isFinal get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_FINAL)
+    val isSuper get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_SUPER)
+    val isSynchronized get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_SYNCHRONIZED)
+    val isVolatile get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_VOLATILE)
+    val isBridge get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_BRIDGE)
+    val isTransient get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_TRANSIENT)
+    val isVarargs get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_VARARGS)
+    val isNative get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_NATIVE)
+    val isInterface get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_INTERFACE)
+    val isAbstract get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_ABSTRACT)
+    val isStrict get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_STRICT)
+    val isSynthetic get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_SYNTHETIC)
+    val isAnnotation get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_ANNOTATION)
+    val isEnum get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_ENUM)
 
     fun isAccessibleTo(d: KvmClass): Boolean {
         if (isPublic) return true

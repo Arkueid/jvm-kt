@@ -52,10 +52,8 @@ class KvmFieldRef(rtCp: KvmConstantPool, fieldRefInfo: ConstantFieldRefInfo) : K
             }
         }
 
-        c.superClass?.let {
-            return lookupField(it, name, descriptor)
+        return c.superClass?.let {
+            lookupField(it, name, descriptor)
         }
-
-        return null
     }
 }

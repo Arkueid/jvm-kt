@@ -1,0 +1,59 @@
+public static main([Ljava/lang/String;)V
+   L0
+    LINENUMBER 8 L0
+    LDC 32768
+    ISTORE 1
+   L1
+    LINENUMBER 9 L1
+    NEW ch06/MyObject
+    DUP
+    INVOKESPECIAL ch06/MyObject.<init> ()V
+    ASTORE 2
+   L2
+    LINENUMBER 10 L2
+    ILOAD 1<-
+    PUTSTATIC ch06/MyObject.staticVar : I
+   L3
+    LINENUMBER 11 L3
+    GETSTATIC ch06/MyObject.staticVar : I
+    ISTORE 1
+   L4
+    LINENUMBER 12 L4
+    ALOAD 2
+    ILOAD 1
+    PUTFIELD ch06/MyObject.instanceVar : I
+   L5
+    LINENUMBER 13 L5
+    ALOAD 2
+    GETFIELD ch06/MyObject.instanceVar : I
+    ISTORE 1
+   L6
+    LINENUMBER 14 L6
+    ALOAD 2
+    ASTORE 3
+   L7
+    LINENUMBER 15 L7
+    ALOAD 3
+    INSTANCEOF ch06/MyObject
+    IFEQ L8
+   L9
+    LINENUMBER 16 L9
+    ALOAD 3
+    CHECKCAST ch06/MyObject
+    ASTORE 2
+   L10
+    LINENUMBER 17 L10
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    ALOAD 2
+    GETFIELD ch06/MyObject.instanceVar : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+   L8
+    LINENUMBER 19 L8
+   FRAME APPEND [I ch06/MyObject java/lang/Object]
+    RETURN
+   L11
+    LOCALVARIABLE args [Ljava/lang/String; L0 L11 0
+    LOCALVARIABLE x I L1 L11 1
+    LOCALVARIABLE myObj Lch06/MyObject; L2 L11 2
+    LOCALVARIABLE obj Ljava/lang/Object; L7 L11 3
+    MAXSTACK = 2

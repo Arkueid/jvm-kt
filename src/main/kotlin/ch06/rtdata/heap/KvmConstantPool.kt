@@ -27,7 +27,7 @@ class KvmConstantPool {
     constructor(klass: KvmClass, cfCp: ConstantPool) {
         this.klass = klass
         constants = Array(cfCp.size) { null }
-        var i = 0
+        var i = 1
         while (i < cfCp.size) {
             cfCp[i]?.let { info ->
                 constants[i] = when (info) {

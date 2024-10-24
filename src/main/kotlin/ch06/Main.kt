@@ -1,8 +1,7 @@
 package ch06
 
 import ch06.classpath.Classpath
-import ch06.classfile.ClassFile
-import ch06.classfile.MemberInfo
+import ch06.rtdata.heap.KvmClassLoader
 
 fun main(args: Array<String>) {
     val cmd = parseCmd(args)
@@ -19,36 +18,15 @@ fun main(args: Array<String>) {
 fun startJvm(cmd: Cmd) {
     val cp = Classpath.parse(cmd.XjreOption, cmd.cpOptions)
 
-    val className = cmd.`class`!!.replace(".", "/")
-    val cf = loadClass(className, cp)
+    val classLoader = KvmClassLoader(cp)
+    val className = cmd.klass!!.replace(".", "/")
+    val mainClass = classLoader.loadClass(className)
+    val mainMethod = mainClass.mainMethod
 
-    val mainMethod = getMainMethod(cf)
     if (mainMethod != null) {
         interpret(mainMethod)
     } else {
-        throw RuntimeException("Main method not found in class ${cmd.`class`}")
+        throw RuntimeException("Main method not found in class ${cmd.klass}")
     }
 }
 
-fun getMainMethod(classFile: ClassFile): MemberInfo? {
-    for (method in classFile.methods) {
-        if (method.name == "main" && method.descriptor == "([Ljava/lang/String;)V") {
-            return method
-        }
-    }
-    return null
-}
-
-fun loadClass(className: String, cp: Classpath): ClassFile {
-    val cpResult = cp.readClass(className)
-    if (cpResult.error != null) {
-        throw RuntimeException(cpResult.error)
-    }
-
-    val cfResult = ClassFile.parse(cpResult.data!!)
-    if (cfResult.error != null) {
-        throw RuntimeException(cfResult.error)
-    }
-
-    return cfResult.classFile!!
-}

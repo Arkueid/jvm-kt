@@ -4,13 +4,12 @@ import ch06.rtdata.heap.KvmMethod
 
 class KvmFrame(
     val thread: KvmThread,
+    val method: KvmMethod,
     maxLocals: UInt,
     maxStack: UInt,
 ) {
     val localVars = KvmLocalVars(maxLocals)
     val operandStack = KvmOperandStack(maxStack)
-
-    val method: KvmMethod get() = TODO()
 
     var lower: KvmFrame? = null
 

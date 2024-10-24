@@ -1,5 +1,7 @@
 package ch06.rtdata
 
+import ch06.rtdata.heap.KvmMethod
+
 class KvmThread {
     var stack: KvmStack = KvmStack(1024u)
     private var _pc: Int = 0
@@ -16,5 +18,6 @@ class KvmThread {
     val currentFrame: KvmFrame get() = stack.top
 
 
-    fun newFrame(maxLocals: UInt, maxStack: UInt): KvmFrame = KvmFrame(this, maxLocals, maxStack)
+    fun newFrame(method: KvmMethod): KvmFrame =
+        KvmFrame(this, method, method.maxLocals, method.maxStack)
 }

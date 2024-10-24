@@ -25,7 +25,7 @@ class KvmField : KvmClassMember() {
         }
     }
 
-    val isLongOrDouble = descriptor == "J" || descriptor == "D"
+    val isLongOrDouble get() = descriptor == "J" || descriptor == "D"
 
     var constantValueIndex: UInt = 0u
 }

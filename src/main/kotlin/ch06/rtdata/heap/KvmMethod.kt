@@ -4,9 +4,9 @@ import ch06.classfile.KvmClass
 import ch06.classfile.MemberInfo
 
 class KvmMethod : KvmClassMember() {
-    private var maxStack: UInt = 0u
-    private var maxLocals: UInt = 0u
-    private lateinit var code: ByteArray
+    var maxStack: UInt = 0u
+    var maxLocals: UInt = 0u
+    lateinit var code: ByteArray
 
     companion object {
         @JvmStatic

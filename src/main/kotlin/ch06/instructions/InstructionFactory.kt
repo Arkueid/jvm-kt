@@ -10,6 +10,15 @@ import ch06.instructions.control.*
 import ch06.instructions.conversions.*
 import ch06.instructions.math.*
 import ch06.instructions.extended.*
+import ch06.instructions.references.CHECK_CAST
+import ch06.instructions.references.GET_FIELD
+import ch06.instructions.references.GET_STATIC
+import ch06.instructions.references.INSTANCE_OF
+import ch06.instructions.references.INVOKE_SPECIAL
+import ch06.instructions.references.INVOKE_VIRTUAL
+import ch06.instructions.references.NEW
+import ch06.instructions.references.PUT_FIELD
+import ch06.instructions.references.PUT_STATIC
 
 
 // 单例
@@ -186,9 +195,9 @@ object InstructionFactory {
             0x0f -> dconst_1
             0x10 -> BIPUSH()
             0x11 -> SIPUSH()
-            // 0x12 ->     // 	 LDC()
-            // 0x13 ->     // 	 LDC_W()
-            // 0x14 ->     // 	 LDC2_W()
+            0x12 -> LDC()
+            0x13 -> LDC_W()
+            0x14 -> LDC2_W()
             0x15 -> ILOAD()
             0x16 -> LLOAD()
             0x17 -> FLOAD()
@@ -340,28 +349,28 @@ object InstructionFactory {
             // 0xa9 ->     // 	 RET()
             0xaa -> TABLE_SWITCH()
             0xab -> LOOKUP_SWITCH()
-            // 0xac ->     // 	 i
-            // 0xad ->     // 	 l
-            // 0xae ->     // 	 f
-            // 0xaf ->     // 	 d
-            // 0xb0 ->     // 	 a
-            // 0xb1 ->     // 	 _
-            //	0xb2 ->     //		 GET_STATIC()
-            // 0xb3 ->     // 	 PUT_STATIC()
-            // 0xb4 ->     // 	 GET_FIELD()
-            // 0xb5 ->     // 	 PUT_FIELD()
-            //	0xb6 ->     //		 INVOKE_VIRTUAL()
-            // 0xb7 ->     // 	 INVOKE_SPECIAL()
+            // 0xac ->     // 	 ireturn
+            // 0xad ->     // 	 lreturn
+            // 0xae ->     // 	 freturn
+            // 0xaf ->     // 	 dreturn
+            // 0xb0 ->     // 	 areturn
+            // 0xb1 ->     // 	 _return
+            0xb2 -> GET_STATIC()
+            0xb3 -> PUT_STATIC()
+            0xb4 -> GET_FIELD()
+            0xb5 -> PUT_FIELD()
+            0xb6 -> INVOKE_VIRTUAL()
+            0xb7 -> INVOKE_SPECIAL()
             // 0xb8 ->     // 	 INVOKE_STATIC()
             // 0xb9 ->     // 	 INVOKE_INTERFACE()
             // 0xba ->     // 	 INVOKE_DYNAMIC()
-            // 0xbb ->     // 	 NEW()
+            0xbb -> NEW()
             // 0xbc ->     // 	 NEW_ARRAY()
             // 0xbd ->     // 	 ANEW_ARRAY()
             // 0xbe ->     // 	 arraylength
             // 0xbf ->     // 	 athrow
-            // 0xc0 ->     // 	 CHECK_CAST()
-            // 0xc1 ->     // 	 INSTANCE_OF()
+            0xc0 -> CHECK_CAST()
+            0xc1 -> INSTANCE_OF()
             // 0xc2 ->     // 	 monitorenter
             // 0xc3 ->     // 	 monitorexit
             0xc4 -> WIDE()

@@ -71,7 +71,9 @@ class KvmOperandStack(
     }
 
     fun pushSlot(slot: KvmSlot) {
-        slots[size] = slot
+        // 不能直接赋值 slots[size] = slot，否则修改另外一个 slot 时，这个位置的值也会改变
+        slots[size].ref = slot.ref
+        slots[size].num = slot.num
         size++
     }
 

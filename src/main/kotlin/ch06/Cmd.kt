@@ -16,7 +16,7 @@ class Cmd {
     @Parameter(names = ["-Xjre"], description = "path to jre")
     var XjreOption: String = ""
 
-    var `class`: String? = null
+    var klass: String? = null
 
     @Parameter(description = "extra arguments")
     var args: MutableList<String> = mutableListOf()
@@ -28,7 +28,7 @@ fun parseCmd(args: Array<String>): Cmd {
     JCommander.newBuilder().addObject(cmd).build().parse(*args)
 
     if (cmd.args.isNotEmpty()) {
-        cmd.`class` = cmd.args[0]
+        cmd.klass = cmd.args[0]
         cmd.args = cmd.args.apply { removeFirst() }
     }
 
