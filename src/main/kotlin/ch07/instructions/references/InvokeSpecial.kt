@@ -27,7 +27,7 @@ class INVOKE_SPECIAL : Index16Instruction() {
             throw RuntimeException("java.lang.IncompatibleClassChangeError")
         }
 
-        val ref = frame.operandStack.getRefFromTop(resolvedMethod.argSlotCount)
+        val ref = frame.operandStack.getRefFromTop(resolvedMethod.argSlotCount - 1)
         if (ref == null) {
             // obj.method(), but obj is null
             throw RuntimeException("java.lang.NullPointerException")

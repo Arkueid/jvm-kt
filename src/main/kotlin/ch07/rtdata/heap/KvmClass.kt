@@ -1,12 +1,6 @@
-package ch07.classfile
+package ch07.rtdata.heap
 
-import ch07.rtdata.heap.KvmAccessFlags
-import ch07.rtdata.heap.KvmClassLoader
-import ch07.rtdata.heap.KvmConstantPool
-import ch07.rtdata.heap.KvmField
-import ch07.rtdata.heap.KvmMethod
-import ch07.rtdata.heap.KvmObject
-import ch07.rtdata.heap.KvmSlots
+import ch07.classfile.ClassFile
 
 class KvmClass(
     val accessFlags: UShort,
@@ -75,7 +69,14 @@ class KvmClass(
     }
 
     fun isSubClassOf(klass: KvmClass): Boolean {
-        TODO("Not yet implemented")
+        var clazz = superClass
+        while (clazz != null) {
+            if (clazz == klass) {
+                return true
+            }
+            clazz = clazz.superClass
+        }
+        return false
     }
 
     fun newObject(): KvmObject {
@@ -102,7 +103,7 @@ class KvmClass(
     }
 
     fun isImplements(iface: KvmClass): Boolean {
-        var clazz: KvmClass? = this.superClass
+        var clazz: KvmClass? = this
         while (clazz != null) {
             if (clazz == iface || clazz.isSubInterfaceOf(iface)) {
                 return true

@@ -18,13 +18,13 @@ fun main(args: Array<String>) {
 fun startJvm(cmd: Cmd) {
     val cp = Classpath.parse(cmd.XjreOption, cmd.cpOptions)
 
-    val classLoader = KvmClassLoader(cp)
+    val classLoader = KvmClassLoader(cp, cmd.verboseClassFlag)
     val className = cmd.klass!!.replace(".", "/")
     val mainClass = classLoader.loadClass(className)
     val mainMethod = mainClass.mainMethod
 
     if (mainMethod != null) {
-        interpret(mainMethod)
+        interpret(mainMethod, cmd.verboseInstFlag)
     } else {
         throw RuntimeException("Main method not found in class ${cmd.klass}")
     }

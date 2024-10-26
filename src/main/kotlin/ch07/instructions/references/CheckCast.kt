@@ -1,6 +1,6 @@
 package ch07.instructions.references
 
-import ch07.classfile.KvmClass
+import ch07.rtdata.heap.KvmClass
 import ch07.instructions.base.Index16Instruction
 import ch07.rtdata.KvmFrame
 import ch07.rtdata.heap.KvmClassRef

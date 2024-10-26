@@ -10,7 +10,7 @@ import ch07.classfile.ConstantLongInfo
 import ch07.classfile.ConstantMethodRefInfo
 import ch07.classfile.ConstantPool
 import ch07.classfile.ConstantStringInfo
-import ch07.classfile.KvmClass
+import ch07.rtdata.heap.KvmClass
 
 interface KvmConstant
 

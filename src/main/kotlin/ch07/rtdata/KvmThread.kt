@@ -21,4 +21,6 @@ class KvmThread {
 
     fun newFrame(method: KvmMethod): KvmFrame =
         KvmFrame(this, method, method.maxLocals, method.maxStack)
+
+    val isStackEmpty: Boolean get() = stack.isEmpty
 }

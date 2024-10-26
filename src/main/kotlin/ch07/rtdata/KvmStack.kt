@@ -28,4 +28,6 @@ class KvmStack(private val maxSize: UInt) {
 
     val top: KvmFrame
         get() = _top ?: throw RuntimeException("jvm stack is empty!")
+
+    val isEmpty: Boolean get() = _top == null
 }

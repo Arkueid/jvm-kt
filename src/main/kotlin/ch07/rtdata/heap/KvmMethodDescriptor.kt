@@ -1,14 +1,11 @@
 package ch07.rtdata.heap
 
 class KvmMethodDescriptor {
-    private var size = 0
-
     fun addParameterType(t: String) {
-        parameterTypes[size] = t
-        size++
+        parameterTypes.add(t)
     }
 
-    lateinit var parameterTypes: Array<String>
+    var parameterTypes: MutableList<String> = mutableListOf()
     lateinit var returnType: String
 
 }

@@ -93,6 +93,7 @@ class KvmMethodDescriptorParser(
             'J' -> "J"
             'S' -> "S"
             'Z' -> "Z"
+            'I' -> "I"
             'L' -> parseObjectType()
             '[' -> parseArrayType()
             else -> {

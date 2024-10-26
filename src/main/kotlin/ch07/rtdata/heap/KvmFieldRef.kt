@@ -1,7 +1,7 @@
 package ch07.rtdata.heap
 
 import ch07.classfile.ConstantFieldRefInfo
-import ch07.classfile.KvmClass
+import ch07.rtdata.heap.KvmClass
 
 class KvmFieldRef(rtCp: KvmConstantPool, fieldRefInfo: ConstantFieldRefInfo) : KvmMemberRef() {
     private lateinit var kvmField: KvmField

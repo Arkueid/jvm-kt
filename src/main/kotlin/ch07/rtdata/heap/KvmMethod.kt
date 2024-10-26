@@ -1,6 +1,6 @@
 package ch07.rtdata.heap
 
-import ch07.classfile.KvmClass
+import ch07.rtdata.heap.KvmClass
 import ch07.classfile.MemberInfo
 
 class KvmMethod : KvmClassMember() {

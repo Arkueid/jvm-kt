@@ -1,11 +1,11 @@
 package ch07.rtdata.heap
 
 import ch07.classfile.ClassFile
-import ch07.classfile.KvmClass
+import ch07.rtdata.heap.KvmClass
 import ch07.classpath.Classpath
 import ch07.classpath.Entry
 
-class KvmClassLoader(val cp: Classpath) {
+class KvmClassLoader(val cp: Classpath, val verboseFlag: Boolean = false) {
     val classMap: MutableMap<String, KvmClass> = mutableMapOf()
 
     fun loadClass(name: String): KvmClass {
@@ -16,7 +16,9 @@ class KvmClassLoader(val cp: Classpath) {
         val result = readClass(name)
         val klass = defineClass(result.data)
         link(klass)
-        println("[Loaded $name from ${result.entry.String()}]")
+        if (verboseFlag) {
+            println("[Loaded $name from ${result.entry.String()}]")
+        }
         return klass
     }
 

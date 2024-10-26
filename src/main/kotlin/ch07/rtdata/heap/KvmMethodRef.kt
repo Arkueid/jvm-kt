@@ -1,7 +1,7 @@
 package ch07.rtdata.heap
 
 import ch07.classfile.ConstantMethodRefInfo
-import ch07.classfile.KvmClass
+import ch07.rtdata.heap.KvmClass
 
 /**
  * 非接口方法引用

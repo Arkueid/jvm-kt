@@ -16,6 +16,12 @@ class Cmd {
     @Parameter(names = ["-Xjre"], description = "path to jre")
     var XjreOption: String = ""
 
+    @Parameter(names = ["-verboseClass"], description = "print class info during execution")
+    var verboseClassFlag: Boolean = false
+
+    @Parameter(names = ["-verboseInst"], description = "print inst info during execution")
+    var verboseInstFlag: Boolean = false
+
     var klass: String? = null
 
     @Parameter(description = "extra arguments")
