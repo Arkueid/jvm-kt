@@ -8,6 +8,10 @@ class KvmFrame(
     maxLocals: UInt,
     maxStack: UInt,
 ) {
+    fun revertNextPC() {
+        _nextPC = thread.pc
+    }
+
     val localVars = KvmLocalVars(maxLocals)
     val operandStack = KvmOperandStack(maxStack)
 

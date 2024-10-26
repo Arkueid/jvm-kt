@@ -1,7 +1,5 @@
 package ch07.rtdata.heap;
 
-import ch07.rtdata.heap.KvmClass;
-
 /**
  * 查找继承树中符合条件的方法
  */

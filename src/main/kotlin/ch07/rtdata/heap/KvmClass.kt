@@ -10,6 +10,13 @@ class KvmClass(
 ) {
     lateinit var constantPool: KvmConstantPool
 
+    private var _initStarted: Boolean = false
+    val initStarted: Boolean get() = _initStarted
+
+    fun startInit() {
+        _initStarted = true
+    }
+
     lateinit var fields: Array<KvmField>
     lateinit var methods: Array<KvmMethod>
     lateinit var loader: KvmClassLoader
@@ -136,4 +143,6 @@ class KvmClass(
     fun isSuperClassOf(other: KvmClass): Boolean {
         return other.isSubClassOf(this)
     }
+
+    fun getClinitMethod(): KvmMethod? = getStaticMethod("<clinit>", "()V")
 }

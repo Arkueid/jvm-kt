@@ -1,11 +1,12 @@
 package ch07.instructions.references
 
 import ch07.instructions.base.Index16Instruction
+import ch07.instructions.base.initClass
 import ch07.instructions.base.invokeMethod
 import ch07.rtdata.KvmFrame
 import ch07.rtdata.heap.KvmMethodRef
 
-class INVOKE_STATIC: Index16Instruction() {
+class INVOKE_STATIC : Index16Instruction() {
     override fun execute(frame: KvmFrame) {
         val cp = frame.method.klass.constantPool
         val methodRef = cp.getConstant(index) as KvmMethodRef
@@ -17,6 +18,14 @@ class INVOKE_STATIC: Index16Instruction() {
             // 初始化方法是实例化的时候执行
             throw RuntimeException("java.lang.IncompatibleClassChangeError")
         }
+
+        val klass = method.klass
+        if (!klass.initStarted) {
+            frame.revertNextPC()
+            initClass(frame.thread, klass)
+            return
+        }
+
         invokeMethod(frame, method)
     }
 

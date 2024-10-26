@@ -1,6 +1,7 @@
 package ch07.instructions.references
 
 import ch07.instructions.base.Index16Instruction
+import ch07.instructions.base.initClass
 import ch07.rtdata.KvmFrame
 import ch07.rtdata.heap.KvmFieldRef
 
@@ -9,6 +10,13 @@ class GET_STATIC : Index16Instruction() {
         val cp = frame.method.klass.constantPool
         val fieldRef = cp.getConstant(index) as KvmFieldRef
         val field = fieldRef.resolvedField
+        val klass = field.klass
+
+        if (!klass.initStarted) {
+            frame.revertNextPC()
+            initClass(frame.thread, klass)
+            return
+        }
 
         if (!field.isStatic) {
             throw RuntimeException("java.lang.IncompatibleClassChangeError")

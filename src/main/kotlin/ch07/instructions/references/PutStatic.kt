@@ -1,6 +1,7 @@
 package ch07.instructions.references
 
 import ch07.instructions.base.Index16Instruction
+import ch07.instructions.base.initClass
 import ch07.rtdata.KvmFrame
 import ch07.rtdata.heap.KvmFieldRef
 
@@ -12,6 +13,10 @@ class PUT_STATIC : Index16Instruction() {
         val fieldRef = cp.getConstant(index) as KvmFieldRef
         val field = fieldRef.resolvedField
         val klass = field.klass
+        if (!klass.initStarted) {
+            frame.revertNextPC()
+            initClass(frame.thread, klass)
+        }
 
         if (!field.isStatic) {
             throw RuntimeException("java.lang.IncompatibleClassChangeError")
@@ -38,4 +43,6 @@ class PUT_STATIC : Index16Instruction() {
             'L', '[' -> slots.setRef(slotId, stack.popRef())
         }
     }
+
+
 }
