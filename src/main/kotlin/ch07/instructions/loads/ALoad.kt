@@ -5,8 +5,8 @@ import ch07.instructions.base.Index8Instruction
 import ch07.instructions.base.NoOperandsInstruction
 
 private fun aLoad(frame: KvmFrame, index: UInt) {
-    val val1 = frame.localVars.getRef(index)
-    frame.operandStack.pushRef(val1)
+    val ref = frame.localVars.getRef(index)
+    frame.operandStack.pushRef(ref)
 }
 
 class ALOAD : Index8Instruction() {

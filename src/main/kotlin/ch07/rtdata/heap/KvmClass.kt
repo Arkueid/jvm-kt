@@ -2,12 +2,12 @@ package ch07.rtdata.heap
 
 import ch07.classfile.ClassFile
 
-class KvmClass(
-    val accessFlags: UShort,
-    val name: String,
-    val superClassName: String,
-    val interfaceNames: Array<String>,
-) {
+class KvmClass() {
+    var accessFlags: UShort = 0u
+    lateinit var name: String
+    lateinit var superClassName: String
+    lateinit var interfaceNames: Array<String>
+
     lateinit var constantPool: KvmConstantPool
 
     private var _initStarted: Boolean = false
@@ -39,6 +39,34 @@ class KvmClass(
         constantPool = KvmConstantPool(this, classFile.constantPool)
         fields = KvmField.createFields(this, classFile.fields)
         methods = KvmMethod.createMethods(this, classFile.methods)
+    }
+
+    constructor(
+        accessFlags: UShort,
+        name: String,
+        superClassName: String,
+        interfaceNames: Array<String>
+    ) : this() {
+        this.accessFlags = accessFlags
+        this.name = name
+        this.superClassName = superClassName
+        this.interfaceNames = interfaceNames
+    }
+
+    constructor(
+        accessFlags: UShort,
+        name: String,
+        loader: KvmClassLoader,
+        initStarted: Boolean,
+        superClass: KvmClass,
+        interfaces: Array<KvmClass>
+    ) : this() {
+        this.accessFlags = accessFlags
+        this.name = name
+        this.loader = loader
+        this._initStarted = initStarted
+        this.superClass = superClass
+        this.interfaces = interfaces
     }
 
     val packageName: String

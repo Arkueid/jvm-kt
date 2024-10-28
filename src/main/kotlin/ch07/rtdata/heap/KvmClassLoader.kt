@@ -1,7 +1,6 @@
 package ch07.rtdata.heap
 
 import ch07.classfile.ClassFile
-import ch07.rtdata.heap.KvmClass
 import ch07.classpath.Classpath
 import ch07.classpath.Entry
 
@@ -9,7 +8,29 @@ class KvmClassLoader(val cp: Classpath, val verboseFlag: Boolean = false) {
     val classMap: MutableMap<String, KvmClass> = mutableMapOf()
 
     fun loadClass(name: String): KvmClass {
-        return classMap[name] ?: loadNonArrayClass(name)
+        return classMap[name] ?: run {
+            if (name[0] == '[') {
+                loadArrayClass(name)
+            } else {
+                loadNonArrayClass(name)
+            }
+        }
+    }
+
+    private fun loadArrayClass(name: String): KvmClass {
+        val klass = KvmClass(
+            KvmAccessFlags.ACC_PUBLIC,
+            name,
+            this,
+            true,
+            loadClass("java/lang/Object"),
+            arrayOf(
+                loadClass("java/lang/Cloneable"),
+                loadClass("java/io/Serializable"),
+            )
+        )
+        classMap[name] = klass
+        return klass
     }
 
     private fun loadNonArrayClass(name: String): KvmClass {

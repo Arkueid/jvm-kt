@@ -1,11 +1,11 @@
 package ch07.rtdata.heap
 
-import ch07.rtdata.heap.KvmClass
-
 class KvmObject(
     val klass: KvmClass,
-    val fields: KvmSlots,
+    private val _fields: KvmSlots = KvmSlots(0u),
+    val data: Array<out Any?> = emptyArray(),
 ) {
+    val fields get() = _fields
 
     fun isInstanceOf(klass: KvmClass): Boolean {
         return klass.isAssignableFrom(klass)
