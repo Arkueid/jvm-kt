@@ -22,7 +22,7 @@ kotlin {
 }
 
 tasks.jar {
-    val currentChapter = "ch07"
+    val currentChapter = "ch08"
     manifest {
         attributes["Main-Class"] = "$currentChapter.MainKt"
     }

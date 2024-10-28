@@ -1,8 +1,8 @@
 import os
 
 base_dir = "./src/main/kotlin"
-src_chapter = "ch06"
-dst_chapter = "ch07"
+src_chapter = "ch07"
+dst_chapter = "ch08"
 
 
 for paths in os.walk(f"{base_dir}/{src_chapter}"):
