@@ -4,6 +4,7 @@ import ch08.rtdata.heap.KvmClass
 import ch08.instructions.base.Index16Instruction
 import ch08.rtdata.KvmFrame
 import ch08.rtdata.heap.KvmClassRef
+import ch08.rtdata.heap.isInstanceOf
 
 class CHECK_CAST : Index16Instruction() {
     override fun execute(frame: KvmFrame) {

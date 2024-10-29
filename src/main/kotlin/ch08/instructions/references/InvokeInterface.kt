@@ -5,6 +5,7 @@ import ch08.instructions.base.Instruction
 import ch08.instructions.base.invokeMethod
 import ch08.rtdata.KvmFrame
 import ch08.rtdata.heap.KvmInterfaceMethodRef
+import ch08.rtdata.heap.isImplements
 import ch08.rtdata.heap.lookupMethodInClass
 
 class INVOKE_INTERFACE : Instruction {

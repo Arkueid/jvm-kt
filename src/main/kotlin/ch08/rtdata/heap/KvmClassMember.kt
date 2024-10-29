@@ -1,6 +1,5 @@
 package ch08.rtdata.heap
 
-import ch08.rtdata.heap.KvmClass
 import ch08.classfile.MemberInfo
 
 

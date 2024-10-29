@@ -3,6 +3,7 @@ package ch08.instructions.references
 import ch08.instructions.base.Index16Instruction
 import ch08.rtdata.KvmFrame
 import ch08.rtdata.heap.KvmClassRef
+import ch08.rtdata.heap.isInstanceOf
 
 /**
  * ref instanceof klass

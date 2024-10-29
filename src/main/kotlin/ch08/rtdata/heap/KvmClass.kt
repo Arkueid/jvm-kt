@@ -103,58 +103,8 @@ class KvmClass() {
         return isPublic || packageName == other.packageName
     }
 
-    fun isSubClassOf(klass: KvmClass): Boolean {
-        var clazz = superClass
-        while (clazz != null) {
-            if (clazz == klass) {
-                return true
-            }
-            clazz = clazz.superClass
-        }
-        return false
-    }
-
     fun newObject(): KvmObject {
         return KvmObject(this, KvmSlots(this.instanceSlotCount.toUInt()))
-    }
-
-    /**
-     * src 是否可以赋值到 类型为 target 的引用上
-     */
-    fun isAssignableFrom(other: KvmClass): Boolean {
-        val s = other
-        val t = this
-        // 同一个类
-        if (s == t) {
-            return true
-        }
-
-        // 是接口
-        return if (t.isInterface) { // 实现了接口
-            s.isImplements(t)
-        } else { // 是子类
-            s.isSubClassOf(t)
-        }
-    }
-
-    fun isImplements(iface: KvmClass): Boolean {
-        var clazz: KvmClass? = this
-        while (clazz != null) {
-            if (clazz == iface || clazz.isSubInterfaceOf(iface)) {
-                return true
-            }
-            clazz = clazz.superClass
-        }
-        return false
-    }
-
-    private fun isSubInterfaceOf(iface: KvmClass): Boolean {
-        interfaces.forEach { clazz ->
-            if (clazz == iface || clazz.isSubInterfaceOf(iface)) {
-                return true
-            }
-        }
-        return false
     }
 
     val mainMethod: KvmMethod? get() = getStaticMethod("main", "([Ljava/lang/String;)V")
@@ -168,9 +118,49 @@ class KvmClass() {
         return null
     }
 
-    fun isSuperClassOf(other: KvmClass): Boolean {
-        return other.isSubClassOf(this)
+    fun getClinitMethod(): KvmMethod? = getStaticMethod("<clinit>", "()V")
+
+    val arrayClass: KvmClass
+        get() {
+            val arrayClassName = getArrayClassName(name)
+            return loader.loadClass(arrayClassName)
+        }
+
+    private fun getArrayClassName(name: String): String = "[" + toDescriptor(name)
+
+    val primitiveTypes = mapOf<String, String>(
+        Pair("void", "V"),
+        Pair("boolean", "Z"),
+        Pair("byte", "B"),
+        Pair("short", "S"),
+        Pair("int", "I"),
+        Pair("long", "J"),
+        Pair("char", "C"),
+        Pair("float", "F"),
+        Pair("double", "D"),
+    )
+
+    private fun toDescriptor(name: String): String {
+        if (name[0] == '[') {
+            return name
+        }
+
+        val d = primitiveTypes[name]
+        if (d != null) {
+            return d
+        }
+
+        return "L$name;"
     }
 
-    fun getClinitMethod(): KvmMethod? = getStaticMethod("<clinit>", "()V")
+    val isJlObject: Boolean get() = name == "java/lang/Object"
+
+    val isJlCloneable: Boolean
+        get() = name == "java/lang/Cloneable"
+
+    val isJioSerializable: Boolean
+        get() = name == "java/io/Serializable"
+
 }
+
+

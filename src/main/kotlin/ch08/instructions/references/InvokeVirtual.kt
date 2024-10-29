@@ -6,6 +6,8 @@ import ch08.rtdata.KvmFrame
 import ch08.rtdata.KvmOperandStack
 import ch08.rtdata.heap.KvmMethod
 import ch08.rtdata.heap.KvmMethodRef
+import ch08.rtdata.heap.isSubClassOf
+import ch08.rtdata.heap.isSuperClassOf
 import ch08.rtdata.heap.lookupMethodInClass
 
 class INVOKE_VIRTUAL : Index16Instruction() {

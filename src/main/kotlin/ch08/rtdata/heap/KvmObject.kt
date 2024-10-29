@@ -7,7 +7,5 @@ class KvmObject(
 ) {
     val fields get() = _fields
 
-    fun isInstanceOf(klass: KvmClass): Boolean {
-        return klass.isAssignableFrom(klass)
-    }
 }
+

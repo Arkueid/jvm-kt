@@ -10,6 +10,8 @@ import ch08.instructions.control.*
 import ch08.instructions.conversions.*
 import ch08.instructions.math.*
 import ch08.instructions.extended.*
+import ch08.instructions.references.ANEW_ARRAY
+import ch08.instructions.references.ARRAY_LENGTH
 import ch08.instructions.references.CHECK_CAST
 import ch08.instructions.references.GET_FIELD
 import ch08.instructions.references.GET_STATIC
@@ -18,7 +20,9 @@ import ch08.instructions.references.INVOKE_INTERFACE
 import ch08.instructions.references.INVOKE_SPECIAL
 import ch08.instructions.references.INVOKE_STATIC
 import ch08.instructions.references.INVOKE_VIRTUAL
+import ch08.instructions.references.MULTI_ANEW_ARRAY
 import ch08.instructions.references.NEW
+import ch08.instructions.references.NEW_ARRAY
 import ch08.instructions.references.PUT_FIELD
 import ch08.instructions.references.PUT_STATIC
 
@@ -61,14 +65,14 @@ val aload_1 = ALOAD_1()
 val aload_2 = ALOAD_2()
 val aload_3 = ALOAD_3()
 
-// iaload = IALOAD()
-// laload = LALOAD()
-// faload = FALOAD()
-// daload = DALOAD()
-// aaload = AALOAD()
-// baload = BALOAD()
-// caload = CALOAD()
-// saload = SALOAD()
+val iaload = IALOAD()
+val laload = LALOAD()
+val faload = FALOAD()
+val daload = DALOAD()
+val aaload = AALOAD()
+val baload = BALOAD()
+val caload = CALOAD()
+val saload = SALOAD()
 val istore_0 = ISTORE_0()
 val istore_1 = ISTORE_1()
 val istore_2 = ISTORE_2()
@@ -90,14 +94,14 @@ val astore_1 = ASTORE_1()
 val astore_2 = ASTORE_2()
 val astore_3 = ASTORE_3()
 
-// iastore  = IASTORE()
-// lastore  = LASTORE()
-// fastore  = FASTORE()
-// dastore  = DASTORE()
-// aastore  = AASTORE()
-// bastore  = BASTORE()
-// castore  = CASTORE()
-// sastore  = SASTORE()
+val iastore = IASTORE()
+val lastore = LASTORE()
+val fastore = FASTORE()
+val dastore = DASTORE()
+val aastore = AASTORE()
+val bastore = BASTORE()
+val castore = CASTORE()
+val sastore = SASTORE()
 val pop = POP()
 val pop2 = POP2()
 val dup = DUP()
@@ -169,11 +173,11 @@ val freturn = FRETURN()
 val dreturn = DRETURN()
 val areturn = ARETURN()
 val _return = RETURN()
-// arraylength   = ARRAY_LENGTH()
-// athrow   = ATHROW()
-// monitorenter  = MONITOR_ENTER()
-// monitorexit   = MONITOR_EXIT()
-// invoke_native = INVOKE_NATIVE()
+val arraylength = ARRAY_LENGTH()
+//val athrow   = ATHROW()
+//val monitorenter  = MONITOR_ENTER()
+//val monitorexit   = MONITOR_EXIT()
+//val invoke_native = INVOKE_NATIVE()
 
 object InstructionFactory {
     @OptIn(ExperimentalStdlibApi::class)
@@ -225,14 +229,14 @@ object InstructionFactory {
             0x2b -> aload_1
             0x2c -> aload_2
             0x2d -> aload_3
-            // 0x2e ->     // 	 iaload
-            // 0x2f ->     // 	 laload
-            // 0x30 ->     // 	 faload
-            // 0x31 ->     // 	 daload
-            // 0x32 ->     // 	 aaload
-            // 0x33 ->     // 	 baload
-            // 0x34 ->     // 	 caload
-            // 0x35 ->     // 	 saload
+            0x2e -> iaload
+            0x2f -> laload
+            0x30 -> faload
+            0x31 -> daload
+            0x32 -> aaload
+            0x33 -> baload
+            0x34 -> caload
+            0x35 -> saload
             0x36 -> ISTORE()
             0x37 -> LSTORE()
             0x38 -> FSTORE()
@@ -258,14 +262,14 @@ object InstructionFactory {
             0x4c -> astore_1
             0x4d -> astore_2
             0x4e -> astore_3
-            // 0x4f ->     // 	 iastore
-            // 0x50 ->     // 	 lastore
-            // 0x51 ->     // 	 fastore
-            // 0x52 ->     // 	 dastore
-            // 0x53 ->     // 	 aastore
-            // 0x54 ->     // 	 bastore
-            // 0x55 ->     // 	 castore
-            // 0x56 ->     // 	 sastore
+            0x4f -> iastore
+            0x50 -> lastore
+            0x51 -> fastore
+            0x52 -> dastore
+            0x53 -> aastore
+            0x54 -> bastore
+            0x55 -> castore
+            0x56 -> sastore
             0x57 -> pop
             0x58 -> pop2
             0x59 -> dup
@@ -347,8 +351,8 @@ object InstructionFactory {
             0xa5 -> IF_ACMPEQ()
             0xa6 -> IF_ACMPNE()
             0xa7 -> GOTO()
-            // 0xa8 ->     // 	 JSR()
-            // 0xa9 ->     // 	 RET()
+            // 0xa8 -> JSR()
+            // 0xa9 -> RET()
             0xaa -> TABLE_SWITCH()
             0xab -> LOOKUP_SWITCH()
             0xac -> ireturn
@@ -365,22 +369,22 @@ object InstructionFactory {
             0xb7 -> INVOKE_SPECIAL()
             0xb8 -> INVOKE_STATIC()
             0xb9 -> INVOKE_INTERFACE()
-            // 0xba -> INVOKE_DYNAMIC()
+//             0xba -> INVOKE_DYNAMIC()
             0xbb -> NEW()
-            // 0xbc ->     // 	 NEW_ARRAY()
-            // 0xbd ->     // 	 ANEW_ARRAY()
-            // 0xbe ->     // 	 arraylength
-            // 0xbf ->     // 	 athrow
+            0xbc -> NEW_ARRAY()
+            0xbd -> ANEW_ARRAY()
+            0xbe -> arraylength
+            // 0xbf -> athrow
             0xc0 -> CHECK_CAST()
             0xc1 -> INSTANCE_OF()
-            // 0xc2 ->     // 	 monitorenter
-            // 0xc3 ->     // 	 monitorexit
+            // 0xc2 -> monitorenter
+            // 0xc3 -> monitorexit
             0xc4 -> WIDE()
-            // 0xc5 ->     // 	 MULTI_ANEW_ARRAY()
+            0xc5 -> MULTI_ANEW_ARRAY()
             0xc6 -> IFNULL()
             0xc7 -> IFNONNULL()
             0xc8 -> GOTO_W()
-            // 0xc9 ->     // 	 JSR_W()
+            // 0xc9 -> JSR_W()
             // case 0xca: breakpoint
             // case 0xfe: impdep1
             // case 0xff: impdep2
