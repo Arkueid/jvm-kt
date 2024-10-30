@@ -24,7 +24,7 @@ fun startJvm(cmd: Cmd) {
     val mainMethod = mainClass.mainMethod
 
     if (mainMethod != null) {
-        interpret(mainMethod, cmd.verboseInstFlag)
+        interpret(mainMethod, cmd.verboseInstFlag, cmd.jArgs)
     } else {
         throw RuntimeException("Main method not found in class ${cmd.klass}")
     }

@@ -4,6 +4,7 @@ import ch08.instructions.base.Index16Instruction
 import ch08.instructions.base.invokeMethod
 import ch08.rtdata.KvmFrame
 import ch08.rtdata.KvmOperandStack
+import ch08.rtdata.heap.kvmJStr2KtStr
 import ch08.rtdata.heap.KvmMethod
 import ch08.rtdata.heap.KvmMethodRef
 import ch08.rtdata.heap.isSubClassOf
@@ -51,14 +52,20 @@ class INVOKE_VIRTUAL : Index16Instruction() {
 
 private fun _println(stack: KvmOperandStack, descriptor: String) {
     when (descriptor) {
-        "(Z)V" -> println("Boolean: ${stack.popInt() != 0}")
-        "(C)V" -> println("Char: ${stack.popInt().toChar()}")
-        "(B)V" -> println("Byte: ${stack.popInt().toByte()}")
-        "(S)V" -> println("Short: ${stack.popInt()}")
-        "(I)V" -> println("Int: ${stack.popInt()}")
-        "(J)V" -> println("Long: ${stack.popLong()}")
-        "(F)V" -> println("Float: ${stack.popFloat()}")
-        "(D)V" -> println("Double: ${stack.popDouble()}")
+        "(Z)V" -> println("${stack.popInt() != 0}")
+        "(C)V" -> println("${stack.popInt().toChar()}")
+        "(B)V" -> println("${stack.popInt().toByte()}")
+        "(S)V" -> println("${stack.popInt()}")
+        "(I)V" -> println("${stack.popInt()}")
+        "(J)V" -> println("${stack.popLong()}")
+        "(F)V" -> println("${stack.popFloat()}")
+        "(D)V" -> println("${stack.popDouble()}")
+        "(Ljava/lang/String;)V" -> {
+            val jStr = stack.popRef()
+            val ktStr = kvmJStr2KtStr(jStr)
+            println("$ktStr")
+        }
+
         else -> throw RuntimeException("println: ${descriptor}")
     }
     stack.popRef()

@@ -77,7 +77,11 @@ class KvmClassLoader(val cp: Classpath, val verboseFlag: Boolean = false) {
                 "J" -> vars.setLong(slotId, cp.getConstant(cpIndex).getLong())
                 "F" -> vars.setFloat(slotId, cp.getConstant(cpIndex).getFloat())
                 "D" -> vars.setDouble(slotId, cp.getConstant(cpIndex).getDouble())
-                "Ljava/lang/String;" -> TODO()
+                "Ljava/lang/String;" -> {
+                    val ktStr = cp.getConstant(cpIndex).getString()
+                    val jStr = kvmJString(klass.loader, ktStr)
+                    vars.setRef(slotId, jStr)
+                }
             }
         }
     }

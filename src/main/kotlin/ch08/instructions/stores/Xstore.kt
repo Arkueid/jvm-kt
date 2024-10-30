@@ -69,7 +69,7 @@ class CASTORE : NoOperandsInstruction() {
             throw RuntimeException("ArrayIndexOutOfBoundsException")
         }
 
-        arr[index] = value.toChar()
+        arr[index] = value.toUShort()
     }
 
 }

@@ -26,6 +26,8 @@ class Cmd {
 
     @Parameter(description = "extra arguments")
     var args: MutableList<String> = mutableListOf()
+
+    lateinit var jArgs: Array<String>
 }
 
 
@@ -35,7 +37,9 @@ fun parseCmd(args: Array<String>): Cmd {
 
     if (cmd.args.isNotEmpty()) {
         cmd.klass = cmd.args[0]
-        cmd.args = cmd.args.apply { removeFirst() }
+        cmd.jArgs = Array(cmd.args.size - 1) {
+            cmd.args[it + 1]
+        }
     }
 
     return cmd

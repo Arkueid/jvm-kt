@@ -63,7 +63,7 @@ class CALOAD : NoOperandsInstruction() {
         if (index < 0 || index >= refs.size) {
             throw RuntimeException("ArrayIndexOutOfBoundsException")
         }
-        stack.pushInt(refs[index].code)
+        stack.pushInt(refs[index].toInt())
     }
 
 }

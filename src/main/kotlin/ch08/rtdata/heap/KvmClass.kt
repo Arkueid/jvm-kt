@@ -153,6 +153,19 @@ class KvmClass() {
         return "L$name;"
     }
 
+    fun getField(fieldName: String, fieldDescriptor: String, isStatic: Boolean): KvmField? {
+        var clazz: KvmClass? = this
+        while (clazz != null) {
+            fields.forEach { field ->
+                if (field.isStatic == isStatic && field.name == fieldName && field.descriptor == fieldDescriptor) {
+                    return field
+                }
+            }
+            clazz = clazz.superClass
+        }
+        return null
+    }
+
     val isJlObject: Boolean get() = name == "java/lang/Object"
 
     val isJlCloneable: Boolean

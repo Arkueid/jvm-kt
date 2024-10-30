@@ -4,20 +4,38 @@ import ch08.instructions.base.BytecodeReader
 import ch08.instructions.base.Instruction
 import ch08.rtdata.KvmFrame
 import ch08.rtdata.KvmThread
+import ch08.rtdata.heap.KvmClassLoader
+import ch08.rtdata.heap.kvmJString
 import ch08.rtdata.heap.KvmMethod
+import ch08.rtdata.heap.KvmObject
+import ch08.rtdata.heap.newArray
+import ch08.rtdata.heap.refs
 
 private const val showStack = false
 
-fun interpret(method: KvmMethod, logInst: Boolean) {
+fun interpret(method: KvmMethod, logInst: Boolean, args: Array<String>) {
     val thread = KvmThread()
     val frame = thread.newFrame(method)
     thread.pushFrame(frame)
+
+    val jArgs = createArgsArray(method.klass.loader, args)
+    frame.localVars.setRef(0u, jArgs)
 
     try {
         loop(thread, logInst, showStack)
     } catch (e: Exception) {
         handleErr(e, thread)
     }
+}
+
+fun createArgsArray(loader: KvmClassLoader, strings: Array<String>): KvmObject {
+    val stringClass = loader.loadClass("java/lang/String")
+    val jStrArray = stringClass.arrayClass.newArray(strings.size)
+    val refs = jStrArray.refs
+    strings.forEachIndexed { index, ktStr ->
+        refs[index] = kvmJString(loader, ktStr)
+    }
+    return jStrArray
 }
 
 fun loop(thread: KvmThread, logInst: Boolean, showStack: Boolean = false) {

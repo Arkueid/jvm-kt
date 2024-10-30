@@ -6,7 +6,9 @@ import ch08.rtdata.KvmFrame
 import ch08.rtdata.heap.KvmDouble
 import ch08.rtdata.heap.KvmFloat
 import ch08.rtdata.heap.KvmInt
+import ch08.rtdata.heap.kvmJString
 import ch08.rtdata.heap.KvmLong
+import ch08.rtdata.heap.KvmString
 import ch08.rtdata.heap.getDouble
 import ch08.rtdata.heap.getFloat
 import ch08.rtdata.heap.getInt
@@ -14,14 +16,17 @@ import ch08.rtdata.heap.getLong
 
 private fun _ldc(frame: KvmFrame, index: UInt) {
     val stack = frame.operandStack
-    val cp = frame.method.klass.constantPool
-    val c = cp.getConstant(index)
+    val klass = frame.method.klass
+    val c = klass.constantPool.getConstant(index)
 
     when (c) {
         is KvmInt -> stack.pushInt(c.getInt())
         is KvmFloat -> stack.pushFloat(c.getFloat())
+        is KvmString -> {
+            val internedStr = kvmJString(klass.loader, c.value)
+            stack.pushRef(internedStr)
+        }
         // TODO:
-        //  is KvmString ->
         //  is KvmClassRef ->
         else -> throw RuntimeException("todo: ldc!")
     }
