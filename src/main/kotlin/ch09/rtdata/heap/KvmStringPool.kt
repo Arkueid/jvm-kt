@@ -31,7 +31,7 @@ private fun stringToUtf16(ktString: String): Array<UShort> {
     }
 }
 
-fun kvmJStr2KtStr(jStr: KvmObject?): String? {
+fun kvmStrFromJStr(jStr: KvmObject?): String? {
     if (jStr == null) return jStr
     val charArr = jStr.getRefVar("value", "[C")
     return charArr.chars.map { Char(it) }.joinToString(separator = "")

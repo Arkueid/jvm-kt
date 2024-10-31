@@ -3,6 +3,10 @@ package ch09.rtdata.heap
 import ch09.classfile.ClassFile
 
 class KvmClass() {
+    var jClass: KvmObject? = null // java.lang.Class 实例
+
+    val javaName: String get() = name.replace("/", ".")
+
     var accessFlags: UShort = 0u
     lateinit var name: String
     lateinit var superClassName: String
@@ -18,7 +22,7 @@ class KvmClass() {
     }
 
     lateinit var fields: Array<KvmField>
-    lateinit var methods: Array<KvmMethod>
+    var methods: Array<KvmMethod> = emptyArray()
     lateinit var loader: KvmClassLoader
     var superClass: KvmClass? = null
     lateinit var interfaces: Array<KvmClass>
@@ -31,21 +35,15 @@ class KvmClass() {
     lateinit var staticVars: KvmSlots
 
     constructor(classFile: ClassFile) : this(
-        classFile.accessFlags,
-        classFile.className,
-        classFile.superClassName,
-        classFile.interfaceNames
+        classFile.accessFlags, classFile.className, classFile.superClassName, classFile.interfaceNames
     ) {
         constantPool = KvmConstantPool(this, classFile.constantPool)
         fields = KvmField.createFields(this, classFile.fields)
-        methods = KvmMethod.createMethods(this, classFile.methods)
+        methods = KvmMethod.newMethods(this, classFile.methods)
     }
 
     constructor(
-        accessFlags: UShort,
-        name: String,
-        superClassName: String,
-        interfaceNames: Array<String>
+        accessFlags: UShort, name: String, superClassName: String, interfaceNames: Array<String>
     ) : this() {
         this.accessFlags = accessFlags
         this.name = name
@@ -67,6 +65,13 @@ class KvmClass() {
         this._initStarted = initStarted
         this.superClass = superClass
         this.interfaces = interfaces
+    }
+
+    constructor(accessFlags: UShort, name: String, loader: KvmClassLoader, initStarted: Boolean) : this() {
+        this.accessFlags = accessFlags
+        this.name = name
+        this.loader = loader
+        this._initStarted = initStarted
     }
 
     val packageName: String

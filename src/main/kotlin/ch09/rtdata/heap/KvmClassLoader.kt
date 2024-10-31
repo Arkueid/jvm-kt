@@ -1,5 +1,6 @@
 package ch09.rtdata.heap
 
+import ch08.rtdata.heap.KvmClass.Companion.primitiveTypes
 import ch09.classfile.ClassFile
 import ch09.classpath.Classpath
 import ch09.classpath.Entry
@@ -7,24 +8,54 @@ import ch09.classpath.Entry
 class KvmClassLoader(val cp: Classpath, val verboseFlag: Boolean = false) {
     val classMap: MutableMap<String, KvmClass> = mutableMapOf()
 
+    init {
+        loadBasicClasses()
+        loadPrimitiveClasses()
+    }
+
+    private fun loadPrimitiveClasses() {
+        primitiveTypes.forEach { primitiveType, _ ->
+            loadPrimitiveClass(primitiveType)
+        }
+    }
+
+    private fun loadPrimitiveClass(className: String) =
+        KvmClass(KvmAccessFlags.ACC_PUBLIC, className, this, true).let { klass ->
+            // java.lang.Class 一定先被加载
+            klass.jClass = classMap["java/lang/Class"]!!.newObject()
+            klass.jClass!!.extra = klass
+            classMap[className] = klass
+        }
+
+
+    private fun loadBasicClasses() {
+        val jlClassClass = loadClass("java/lang/Class")
+        classMap.forEach { string, klass ->
+            if (klass.jClass == null) {
+                klass.jClass = jlClassClass.newObject()
+                klass.jClass!!.extra = klass
+            }
+        }
+    }
+
     fun loadClass(name: String): KvmClass {
         return classMap[name] ?: run {
             if (name[0] == '[') {
                 loadArrayClass(name)
             } else {
                 loadNonArrayClass(name)
+            }.apply { // 正在被加载的类
+                classMap["java/lang/Class"]?.let { jlClassClass -> // 连接上对应的类实例
+                    this.jClass = jlClassClass.newObject()
+                    this.jClass!!.extra = this
+                }
             }
         }
     }
 
     private fun loadArrayClass(name: String): KvmClass {
         val klass = KvmClass(
-            KvmAccessFlags.ACC_PUBLIC,
-            name,
-            this,
-            true,
-            loadClass("java/lang/Object"),
-            arrayOf(
+            KvmAccessFlags.ACC_PUBLIC, name, this, true, loadClass("java/lang/Object"), arrayOf(
                 loadClass("java/lang/Cloneable"),
                 loadClass("java/io/Serializable"),
             )
@@ -111,8 +142,8 @@ class KvmClassLoader(val cp: Classpath, val verboseFlag: Boolean = false) {
 
     private fun verify(klass: KvmClass) {
         // TODO 参考书目未做实现。Java 虚拟机规范 4.10 节
-        // 保证类符合当前虚拟机要求，不会损害虚拟机自身安全
-        // 文件格式验证，元数据验证，字节码验证和符号引用验证
+        //  保证类符合当前虚拟机要求，不会损害虚拟机自身安全
+        //  文件格式验证，元数据验证，字节码验证和符号引用验证
     }
 
     private fun defineClass(bytes: ByteArray): KvmClass {

@@ -4,7 +4,7 @@ import ch08.instructions.base.Index16Instruction
 import ch08.instructions.base.invokeMethod
 import ch08.rtdata.KvmFrame
 import ch08.rtdata.KvmOperandStack
-import ch08.rtdata.heap.kvmJStr2KtStr
+import ch08.rtdata.heap.kvmStrFromJStr
 import ch08.rtdata.heap.KvmMethod
 import ch08.rtdata.heap.KvmMethodRef
 import ch08.rtdata.heap.isSubClassOf
@@ -62,7 +62,7 @@ private fun _println(stack: KvmOperandStack, descriptor: String) {
         "(D)V" -> println("${stack.popDouble()}")
         "(Ljava/lang/String;)V" -> {
             val jStr = stack.popRef()
-            val ktStr = kvmJStr2KtStr(jStr)
+            val ktStr = kvmStrFromJStr(jStr)
             println("$ktStr")
         }
 

@@ -5,6 +5,9 @@ class KvmObject(
     private val _fields: KvmSlots = KvmSlots(0u),
     val data: Array<out Any?> = emptyArray(),
 ) {
+    // 类实例/类对象 --> obj.getClass()/obj.class 得到的对象
+    lateinit var extra: KvmClass
+
     fun setRefVar(fieldName: String, fieldDescriptor: String, ref: KvmObject) {
         val field = klass.getField(fieldName, fieldDescriptor, false)
         if (field == null) {

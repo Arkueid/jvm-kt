@@ -1,5 +1,7 @@
 package ch08.rtdata.heap
 
+import ch08.rtdata.heap.KvmClass.Companion.primitiveTypes
+
 val KvmClass.isArray: Boolean get() = name[0] == '['
 
 fun KvmClass.newArray(count: Int): KvmObject {

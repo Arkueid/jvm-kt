@@ -17,7 +17,7 @@ class PUT_FIELD : Index16Instruction() {
         }
 
         if (field.isFinal) { // 同一个类的初始化函数才能为 final 字段赋值
-            if (currentClass != field.klass || field.name != "<init>") {
+            if (currentClass != field.klass || currentMethod.name != "<init>") {
                 throw RuntimeException("java.lang.IllegalAccessError")
             }
         }

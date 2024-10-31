@@ -3,6 +3,7 @@ package ch09.instructions.constants
 import ch09.instructions.base.Index16Instruction
 import ch09.instructions.base.Index8Instruction
 import ch09.rtdata.KvmFrame
+import ch09.rtdata.heap.KvmClassRef
 import ch09.rtdata.heap.KvmDouble
 import ch09.rtdata.heap.KvmFloat
 import ch09.rtdata.heap.KvmInt
@@ -26,22 +27,24 @@ private fun _ldc(frame: KvmFrame, index: UInt) {
             val internedStr = kvmJString(klass.loader, c.value)
             stack.pushRef(internedStr)
         }
-        // TODO:
-        //  is KvmClassRef ->
+
+        is KvmClassRef -> {
+            val classObj = c.resolvedClass.jClass
+            stack.pushRef(classObj)
+        }
+
         else -> throw RuntimeException("todo: ldc!")
     }
 }
 
 class LDC : Index8Instruction() {
-    override fun execute(frame: KvmFrame) {
-        _ldc(frame, index)
-    }
+    override fun execute(frame: KvmFrame) = _ldc(frame, index)
+
 }
 
 class LDC_W : Index16Instruction() {
-    override fun execute(frame: KvmFrame) {
-        _ldc(frame, index)
-    }
+    override fun execute(frame: KvmFrame) = _ldc(frame, index)
+
 }
 
 class LDC2_W : Index16Instruction() {

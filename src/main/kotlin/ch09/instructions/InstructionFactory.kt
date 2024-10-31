@@ -25,6 +25,7 @@ import ch09.instructions.references.NEW
 import ch09.instructions.references.NEW_ARRAY
 import ch09.instructions.references.PUT_FIELD
 import ch09.instructions.references.PUT_STATIC
+import ch09.instructions.reversed.INVOKE_NATIVE
 
 
 // 单例
@@ -174,10 +175,11 @@ val dreturn = DRETURN()
 val areturn = ARETURN()
 val _return = RETURN()
 val arraylength = ARRAY_LENGTH()
+
 //val athrow   = ATHROW()
 //val monitorenter  = MONITOR_ENTER()
 //val monitorexit   = MONITOR_EXIT()
-//val invoke_native = INVOKE_NATIVE()
+val invoke_native = INVOKE_NATIVE()
 
 object InstructionFactory {
     @OptIn(ExperimentalStdlibApi::class)
@@ -386,7 +388,7 @@ object InstructionFactory {
             0xc8 -> GOTO_W()
             // 0xc9 -> JSR_W()
             // case 0xca: breakpoint
-            // case 0xfe: impdep1
+            0xfe -> invoke_native
             // case 0xff: impdep2
             else -> throw RuntimeException("Unsupported opcode: 0x${opcode.toHexString()}")
         }
