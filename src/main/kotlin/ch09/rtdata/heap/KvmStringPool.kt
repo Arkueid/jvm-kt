@@ -36,3 +36,12 @@ fun kvmStrFromJStr(jStr: KvmObject?): String? {
     val charArr = jStr.getRefVar("value", "[C")
     return charArr.chars.map { Char(it) }.joinToString(separator = "")
 }
+
+
+fun internString(jStr: KvmObject): KvmObject {
+    val ktString = kvmStrFromJStr(jStr)!!
+    return internedStrings[ktString] ?: run {
+        internedStrings[ktString] = jStr
+        jStr
+    }
+}

@@ -133,17 +133,20 @@ class KvmClass() {
 
     private fun getArrayClassName(name: String): String = "[" + toDescriptor(name)
 
-    val primitiveTypes = mapOf<String, String>(
-        Pair("void", "V"),
-        Pair("boolean", "Z"),
-        Pair("byte", "B"),
-        Pair("short", "S"),
-        Pair("int", "I"),
-        Pair("long", "J"),
-        Pair("char", "C"),
-        Pair("float", "F"),
-        Pair("double", "D"),
-    )
+    companion object {
+        @JvmStatic
+        val primitiveTypes = mapOf<String, String>(
+            Pair("void", "V"),
+            Pair("boolean", "Z"),
+            Pair("byte", "B"),
+            Pair("short", "S"),
+            Pair("int", "I"),
+            Pair("long", "J"),
+            Pair("char", "C"),
+            Pair("float", "F"),
+            Pair("double", "D"),
+        )
+    }
 
     private fun toDescriptor(name: String): String {
         if (name[0] == '[') {
@@ -178,6 +181,8 @@ class KvmClass() {
 
     val isJioSerializable: Boolean
         get() = name == "java/io/Serializable"
+
+    val isPrimitive: Boolean get() = primitiveTypes[name] != null
 
 }
 

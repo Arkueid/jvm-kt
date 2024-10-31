@@ -40,9 +40,9 @@ private fun KvmClass.toClassName(descriptor: String): String {
         return descriptor.substring(1, descriptor.length - 1)
     }
 
-    for (pair in primitiveTypes) {
-        if (pair.key == descriptor) {
-            return pair.value
+    for (pair in KvmClass.primitiveTypes) {
+        if (pair.value == descriptor) {
+            return pair.key
         }
     }
 
