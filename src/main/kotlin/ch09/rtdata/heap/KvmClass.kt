@@ -174,6 +174,31 @@ class KvmClass() {
         return null
     }
 
+    fun getRefVar(name: String, descriptor: String): KvmObject {
+        val field = getField(name, descriptor, true)
+        if (field == null) {
+            throw RuntimeException("NoSuchFieldException: ${this.name}.$name$descriptor")
+        }
+        return staticVars.getRef(field.slotId)!!
+    }
+
+    fun setRefVar(name: String, descriptor: String, ref: KvmObject) {
+        val field = getField(name, descriptor, true)
+        if (field == null) {
+            throw RuntimeException("NoSuchFieldException: ${this.name}.$name$descriptor")
+        }
+        staticVars.setRef(field.slotId, ref)
+    }
+
+    fun getInstanceMethod(name: String, descriptor: String): KvmMethod? {
+        methods.forEach { method ->
+            if (!method.isStatic && method.name == name && method.descriptor == descriptor) {
+                return method
+            }
+        }
+        return null
+    }
+
     val isJlObject: Boolean get() = name == "java/lang/Object"
 
     val isJlCloneable: Boolean

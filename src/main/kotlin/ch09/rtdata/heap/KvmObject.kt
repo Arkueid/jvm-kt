@@ -22,7 +22,7 @@ class KvmObject(
         if (field == null) {
             throw RuntimeException("NoSuchFieldException: ${klass.name}.$fieldName$fieldDescriptor")
         }
-        return fields.getRef(field.slotId)!!
+        return _fields.getRef(field.slotId)!!
     }
 
     fun clone(): KvmObject = KvmObject(klass, cloneFields(), cloneData())

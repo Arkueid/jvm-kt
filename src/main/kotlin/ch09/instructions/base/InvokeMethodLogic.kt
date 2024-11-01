@@ -15,13 +15,4 @@ fun invokeMethod(frame: KvmFrame, method: KvmMethod) {
         newFrame.localVars.setSlot(slotId.toUInt(), slot)
         slotId--
     }
-
-    // 暂时跳过本地方法
-//    if (method.isNative) {
-//        if (method.name == "registerNatives") {
-//            thread.popFrame()
-//        } else {
-//            throw RuntimeException("native method: ${method.klass.name}.${method.name}${method.descriptor}")
-//        }
-//    }
 }
