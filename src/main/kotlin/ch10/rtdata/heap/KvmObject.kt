@@ -1,8 +1,5 @@
 package ch10.rtdata.heap
 
-import ch10.kvm_native.java.lang.KvmStackTraceElement
-import com.sun.tools.javac.comp.Todo
-
 class KvmObject(
     // TODO: 默认参数，方便测试
     val klass: KvmClass = KvmClass(),

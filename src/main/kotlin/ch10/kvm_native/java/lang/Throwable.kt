@@ -5,7 +5,7 @@ import ch10.rtdata.KvmFrame
 import ch10.rtdata.KvmThread
 import ch10.rtdata.heap.KvmClass
 import ch10.rtdata.heap.KvmObject
-import kotlin.String
+import ch10.rtdata.heap.KvmStackTraceElement
 
 object Throwable {
     @JvmStatic
@@ -35,7 +35,7 @@ private fun createStackTraceElements(tObj: KvmObject, thread: KvmThread): Array<
 }
 
 // 到 java/lang/Object 的距离
-fun distanceToObject(klass: KvmClass): Int {
+private fun distanceToObject(klass: KvmClass): Int {
     var distance = 0
     var clazz = klass.superClass
     while (clazz != null) {
@@ -45,7 +45,7 @@ fun distanceToObject(klass: KvmClass): Int {
     return distance
 }
 
-fun createStackTraceElement(frame: KvmFrame): KvmStackTraceElement {
+private fun createStackTraceElement(frame: KvmFrame): KvmStackTraceElement {
     val method = frame.method
     val clazz = method.klass
     return KvmStackTraceElement(
@@ -54,14 +54,5 @@ fun createStackTraceElement(frame: KvmFrame): KvmStackTraceElement {
         method.name,
         method.getLineNumber(frame.nextPC - 1)
     )
-}
-
-class KvmStackTraceElement(
-    val fileName: String,
-    val className: String,
-    val methodName: String,
-    val lineNumber: Int,
-) {
-    fun String(): String = "$className.$methodName($fileName:$lineNumber)"
 }
 
