@@ -167,9 +167,9 @@ class LineNumberTableAttribute : AttributeInfo {
     }
 
     fun getLineNumber(pc: Int): Int {
-        repeat(lineNumberTable.size) {
-            val entry = lineNumberTable[it]
-            if (entry.startPc.toInt() <= pc) {
+        for (i in lineNumberTable.size-1 downTo 0) {
+            val entry = lineNumberTable[i]
+            if (pc >= entry.startPc.toInt()) {
                 return entry.lineNumber.toInt()
             }
         }

@@ -102,7 +102,7 @@ fun showFrames(thread: KvmThread) {
 fun showFrame(frame: KvmFrame) {
     val method = frame.method
     val className = method.klass.name
-    println(">> pc: ${frame.nextPC} $className.${method.name}${method.descriptor}")
+    println(">>${method.getLineNumber(frame.nextPC)} pc: ${frame.nextPC} $className.${method.name}${method.descriptor}")
 }
 
 /**

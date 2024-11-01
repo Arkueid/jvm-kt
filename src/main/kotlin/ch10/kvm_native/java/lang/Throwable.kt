@@ -18,8 +18,7 @@ private fun fillInStackTrace(frame: KvmFrame) {
     val _this = frame.localVars.getRef(0u)!!
     frame.operandStack.pushRef(_this)
 
-    val stes = createStackTraceElements(_this, frame.thread)
-    _this.exceptionInfo = stes
+    _this.exceptionInfo = createStackTraceElements(_this, frame.thread)
 }
 
 private fun createStackTraceElements(tObj: KvmObject, thread: KvmThread): Array<KvmStackTraceElement> {
@@ -28,7 +27,7 @@ private fun createStackTraceElements(tObj: KvmObject, thread: KvmThread): Array<
     //  异常的构造方法从 java.lang.Object 开始
     //  再加上 两个调用 fillInStackTrace() -> fillInStackTrace(0)
     val skip = distanceToObject(tObj.klass) + 2
-    val frames = thread.frames.let { it.slice(skip..it.size - 1) }
+    var frames = thread.frames.let { it.subList(skip, it.size) }
     return Array<KvmStackTraceElement>(frames.size) {
         createStackTraceElement(frames[it])
     }
