@@ -1,5 +1,8 @@
 package ch10.rtdata.heap
 
+import ch10.kvm_native.java.lang.KvmStackTraceElement
+import com.sun.tools.javac.comp.Todo
+
 class KvmObject(
     // TODO: 默认参数，方便测试
     val klass: KvmClass = KvmClass(),
@@ -8,6 +11,8 @@ class KvmObject(
 ) {
     // 类实例/类对象 --> obj.getClass()/obj.class 得到的对象
     lateinit var extra: KvmClass
+
+    lateinit var exceptionInfo: Array<KvmStackTraceElement>
 
     fun setRefVar(fieldName: String, fieldDescriptor: String, ref: KvmObject) {
         val field = klass.getField(fieldName, fieldDescriptor, false)

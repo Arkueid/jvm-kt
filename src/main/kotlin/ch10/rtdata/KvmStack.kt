@@ -30,4 +30,21 @@ class KvmStack(private val maxSize: UInt) {
         get() = _top ?: throw RuntimeException("jvm stack is empty!")
 
     val isEmpty: Boolean get() = _top == null
+
+    fun clear() {
+        while (!isEmpty) {
+            pop()
+        }
+    }
+
+    val frames: List<KvmFrame>
+        get() {
+            val list = mutableListOf<KvmFrame>()
+            var f = _top
+            while (f != null) {
+                list.add(f)
+                f = f.lower
+            }
+            return list
+        }
 }

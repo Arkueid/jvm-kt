@@ -89,4 +89,9 @@ class KvmOperandStack(
         return slots[size - i - 1].ref
     }
 
+    fun clear() {
+        size = 0
+        slots.forEach { it.ref = null }
+    }
+
 }

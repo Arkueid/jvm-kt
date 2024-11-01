@@ -12,6 +12,7 @@ import ch10.instructions.math.*
 import ch10.instructions.extended.*
 import ch10.instructions.references.ANEW_ARRAY
 import ch10.instructions.references.ARRAY_LENGTH
+import ch10.instructions.references.ATHROW
 import ch10.instructions.references.CHECK_CAST
 import ch10.instructions.references.GET_FIELD
 import ch10.instructions.references.GET_STATIC
@@ -176,7 +177,8 @@ val areturn = ARETURN()
 val _return = RETURN()
 val arraylength = ARRAY_LENGTH()
 
-//val athrow   = ATHROW()
+val athrow = ATHROW()
+
 //val monitorenter  = MONITOR_ENTER()
 //val monitorexit   = MONITOR_EXIT()
 val invoke_native = INVOKE_NATIVE()
@@ -376,20 +378,20 @@ object InstructionFactory {
             0xbc -> NEW_ARRAY()
             0xbd -> ANEW_ARRAY()
             0xbe -> arraylength
-            // 0xbf -> athrow
+            0xbf -> athrow
             0xc0 -> CHECK_CAST()
             0xc1 -> INSTANCE_OF()
-            // 0xc2 -> monitorenter
-            // 0xc3 -> monitorexit
+//             0xc2 -> monitorenter
+//             0xc3 -> monitorexit
             0xc4 -> WIDE()
             0xc5 -> MULTI_ANEW_ARRAY()
             0xc6 -> IFNULL()
             0xc7 -> IFNONNULL()
             0xc8 -> GOTO_W()
-            // 0xc9 -> JSR_W()
-            // case 0xca: breakpoint
+//             0xc9 -> JSR_W()
+//             0xca -> breakpoint
             0xfe -> invoke_native
-            // case 0xff: impdep2
+//             0xff -> impdep2
             else -> throw RuntimeException("Unsupported opcode: 0x${opcode.toHexString()}")
         }
     }

@@ -11,6 +11,7 @@ class KvmClass() {
     lateinit var name: String
     lateinit var superClassName: String
     lateinit var interfaceNames: Array<String>
+    lateinit var sourceFile: String
 
     lateinit var constantPool: KvmConstantPool
 
@@ -40,6 +41,11 @@ class KvmClass() {
         constantPool = KvmConstantPool(this, classFile.constantPool)
         fields = KvmField.createFields(this, classFile.fields)
         methods = KvmMethod.newMethods(this, classFile.methods)
+        sourceFile = getSourceFile(classFile)
+    }
+
+    private fun getSourceFile(file: ClassFile): String {
+        return file.sourceFileAttribute?.fileName ?: "Unknown"
     }
 
     constructor(
@@ -164,7 +170,7 @@ class KvmClass() {
     fun getField(fieldName: String, fieldDescriptor: String, isStatic: Boolean): KvmField? {
         var clazz: KvmClass? = this
         while (clazz != null) {
-            fields.forEach { field ->
+            clazz.fields.forEach { field ->
                 if (field.isStatic == isStatic && field.name == fieldName && field.descriptor == fieldDescriptor) {
                     return field
                 }
@@ -208,7 +214,6 @@ class KvmClass() {
         get() = name == "java/io/Serializable"
 
     val isPrimitive: Boolean get() = primitiveTypes[name] != null
-
 }
 
 

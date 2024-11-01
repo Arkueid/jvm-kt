@@ -134,6 +134,15 @@ class CodeAttribute(
         }
     }
 
+    val lineNumberTable: LineNumberTableAttribute?
+        get() {
+            attributes.forEach { attr ->
+                if (attr is LineNumberTableAttribute) {
+                    return attr
+                }
+            }
+            return null
+        }
 }
 
 
@@ -155,6 +164,16 @@ class LineNumberTableAttribute : AttributeInfo {
                 reader.readUint16()
             )
         }
+    }
+
+    fun getLineNumber(pc: Int): Int {
+        repeat(lineNumberTable.size) {
+            val entry = lineNumberTable[it]
+            if (entry.startPc.toInt() <= pc) {
+                return entry.lineNumber.toInt()
+            }
+        }
+        return -1
     }
 
 }

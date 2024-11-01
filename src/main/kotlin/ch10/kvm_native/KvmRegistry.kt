@@ -17,6 +17,7 @@ object KvmNative {
         ch10.kvm_native.java.lang.String.init()
         ch10.kvm_native.java.lang.Double.init()
         ch10.kvm_native.sun.misc.VM.init()
+        ch10.kvm_native.java.lang.Throwable.init()
     }
 
     fun register(className: String, methodName: String, methodDescriptor: String, method: NativeMethod) {

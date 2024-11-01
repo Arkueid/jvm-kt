@@ -43,7 +43,7 @@ private fun clone(frame: KvmFrame) {
 private val hashCodeMap = mutableMapOf<Int, Int>()
 
 // enable us to predict the result, though smelly
-var startCode = 114514
+private var startCode = 114514
 private fun myHashCode(obj: KvmObject): Int {
     return hashCodeMap[obj.hashCode()] ?: run {
         hashCodeMap[obj.hashCode()] = startCode

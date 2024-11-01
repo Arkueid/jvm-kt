@@ -33,6 +33,15 @@ class ClassFile {
     private var _attributes: Array<AttributeInfo> = emptyArray()
     val attributes get() = _attributes
 
+    val sourceFileAttribute: SourceFileAttribute? get() {
+        attributes.forEach { attr ->
+            if (attr is SourceFileAttribute) {
+                return attr
+            }
+        }
+        return null
+    }
+
     private fun read(reader: ClassReader) {
         readAndCheckMagic(reader)
         readAndCheckVersion(reader)
