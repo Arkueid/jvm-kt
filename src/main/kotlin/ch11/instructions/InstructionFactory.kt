@@ -21,6 +21,8 @@ import ch11.instructions.references.INVOKE_INTERFACE
 import ch11.instructions.references.INVOKE_SPECIAL
 import ch11.instructions.references.INVOKE_STATIC
 import ch11.instructions.references.INVOKE_VIRTUAL
+import ch11.instructions.references.MONITOR_ENTER
+import ch11.instructions.references.MONITOR_EXIT
 import ch11.instructions.references.MULTI_ANEW_ARRAY
 import ch11.instructions.references.NEW
 import ch11.instructions.references.NEW_ARRAY
@@ -179,8 +181,8 @@ val arraylength = ARRAY_LENGTH()
 
 val athrow = ATHROW()
 
-//val monitorenter  = MONITOR_ENTER()
-//val monitorexit   = MONITOR_EXIT()
+val monitorenter = MONITOR_ENTER()
+val monitorexit = MONITOR_EXIT()
 val invoke_native = INVOKE_NATIVE()
 
 object InstructionFactory {
@@ -381,8 +383,8 @@ object InstructionFactory {
             0xbf -> athrow
             0xc0 -> CHECK_CAST()
             0xc1 -> INSTANCE_OF()
-//             0xc2 -> monitorenter
-//             0xc3 -> monitorexit
+            0xc2 -> monitorenter
+            0xc3 -> monitorexit
             0xc4 -> WIDE()
             0xc5 -> MULTI_ANEW_ARRAY()
             0xc6 -> IFNULL()

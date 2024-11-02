@@ -15,6 +15,23 @@ class KvmOperandStack(
         slots = Array(maxStack.toInt()) { KvmSlot() }
     }
 
+    fun pushBoolean(value: Boolean) {
+        if (value) {
+            pushInt(1)
+        } else {
+            pushInt(0)
+        }
+    }
+
+    fun popBoolean(): Boolean {
+        val i = popInt()
+        if (i == 0) {
+            return false
+        } else {
+            return true
+        }
+    }
+
     fun pushInt(value: Int) {
         slots[size].num = value
         size++
@@ -81,6 +98,7 @@ class KvmOperandStack(
         size--
         return KvmSlot().apply {
             this.ref = slots[size].ref
+            slots[size].ref = null
             this.num = slots[size].num
         }
     }

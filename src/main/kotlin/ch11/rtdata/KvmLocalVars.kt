@@ -14,6 +14,10 @@ open class KvmLocalVars(
         slots = Array(maxLocals.toInt()) { KvmSlot() }
     }
 
+    fun getBoolean(index: UInt): Boolean {
+        return getInt(index) != 0
+    }
+
     fun getInt(index: UInt): Int {
         return slots[index.toInt()].num
     }

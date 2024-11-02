@@ -7,7 +7,25 @@ class MemberInfo(
     private var descriptionIndex: UShort,
     private var attributes: Array<AttributeInfo>,
 ) {
+    val exceptionAttribute: ExceptionsAttribute?
+        get() {
+            attributes.forEach { attr ->
+                if (attr is ExceptionsAttribute) {
+                    return attr
+                }
+            }
+            return null
+        }
 
+    val signatureAttribute: SignatureAttribute?
+        get() {
+            attributes.forEach { attr ->
+                if (attr is SignatureAttribute) {
+                    return attr
+                }
+            }
+            return null
+        }
 
     val codeAttribute: CodeAttribute?
         get() {
@@ -51,5 +69,24 @@ class MemberInfo(
                 AttributeInfo.readAttributes(reader, constantPool)
             )
         }
+    }
+
+    val runtimeVisibleAnnotationsAttributeData: ByteArray? get() = getUnparsedAttributeData("RuntimeVisibleAnnotations")
+
+    val runtimeVisibleParameterAnnotationsAttributeData: ByteArray? get() = getUnparsedAttributeData("RuntimeVisibleParameterAnnotationsAttribute")
+
+    val annotationDefaultAttributeData: ByteArray? get() = getUnparsedAttributeData("AnnotationDefault")
+
+    val signature get() = signatureAttribute?.signature
+
+    private fun getUnparsedAttributeData(name: String): ByteArray? {
+        attributes.forEach { attr ->
+            if (attr is UnparsedAttribute) {
+                if (attr.name == name) {
+                    return attr.info
+                }
+            }
+        }
+        return null
     }
 }

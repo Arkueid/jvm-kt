@@ -23,7 +23,7 @@ class KvmClassLoader(val cp: Classpath, val verboseFlag: Boolean = false) {
         KvmClass(KvmAccessFlags.ACC_PUBLIC, className, this, true).let { klass ->
             // java.lang.Class 一定先被加载
             klass.jClass = classMap["java/lang/Class"]!!.newObject()
-            klass.jClass!!.extra = klass
+            klass.jClass!!.extraClass = klass
             classMap[className] = klass
         }
 
@@ -33,7 +33,7 @@ class KvmClassLoader(val cp: Classpath, val verboseFlag: Boolean = false) {
         classMap.forEach { string, klass ->
             if (klass.jClass == null) {
                 klass.jClass = jlClassClass.newObject()
-                klass.jClass!!.extra = klass
+                klass.jClass!!.extraClass = klass
             }
         }
     }
@@ -47,7 +47,7 @@ class KvmClassLoader(val cp: Classpath, val verboseFlag: Boolean = false) {
             }.apply { // 正在被加载的类
                 classMap["java/lang/Class"]?.let { jlClassClass -> // 连接上对应的类实例
                     this.jClass = jlClassClass.newObject()
-                    this.jClass!!.extra = this
+                    this.jClass!!.extraClass = this
                 }
             }
         }
@@ -170,6 +170,7 @@ class KvmClassLoader(val cp: Classpath, val verboseFlag: Boolean = false) {
     private fun parseClass(bytes: ByteArray): KvmClass {
         val result = ClassFile.parse(bytes)
         if (result.error != null) {
+            //
             throw RuntimeException("java.lang.ClassFormatError")
         }
 

@@ -1,15 +1,21 @@
 package ch11.rtdata.heap
 
+import ch11.classfile.ExceptionsAttribute
 import ch11.classfile.LineNumberTableAttribute
 import ch11.classfile.MemberInfo
 import ch11.rtdata.heap.KvmMethodDescriptorParser.Companion.parseMethodDescriptor
 
-class KvmMethod : KvmClassMember() {
+open class KvmMethod : KvmClassMember() {
     var maxStack: UInt = 0u
     var maxLocals: UInt = 0u
     lateinit var code: ByteArray
-    lateinit var exceptionTable: KvmExceptionTable
+    var exceptions: ExceptionsAttribute? = null
+    var exceptionTable: KvmExceptionTable = emptyArray()
     var lineNumberTable: LineNumberTableAttribute? = null
+    lateinit var parsedDescriptor: KvmMethodDescriptor
+
+    var parameterAnnotationData: ByteArray? = null
+    var annotationDefaultData: ByteArray? = null
 
     companion object {
         @JvmStatic
@@ -29,6 +35,7 @@ class KvmMethod : KvmClassMember() {
             if (method.isNative) {
                 method.injectCodeAttribute(md.returnType)
             }
+            method.parsedDescriptor = md
             return method
         }
     }
@@ -59,12 +66,18 @@ class KvmMethod : KvmClassMember() {
         }
     }
 
-    private fun copyAttributes(info: MemberInfo) = info.codeAttribute?.let {
-        maxStack = it.maxStack.toUInt()
-        maxLocals = it.maxLocals.toUInt()
-        code = it.code
-        exceptionTable = newKvmExceptionTable(it.exceptionTable, klass.constantPool)
-        lineNumberTable = it.lineNumberTable
+    private fun copyAttributes(info: MemberInfo) {
+        info.codeAttribute?.let {
+            maxStack = it.maxStack.toUInt()
+            maxLocals = it.maxLocals.toUInt()
+            code = it.code
+            exceptionTable = newKvmExceptionTable(it.exceptionTable, klass.constantPool)
+            lineNumberTable = it.lineNumberTable
+        }
+        exceptions = info.exceptionAttribute
+        annotationData = info.runtimeVisibleAnnotationsAttributeData
+        parameterAnnotationData = info.runtimeVisibleParameterAnnotationsAttributeData
+        annotationDefaultData = info.annotationDefaultAttributeData
     }
 
     fun findExceptionHandler(klass: KvmClass, pc: Int): Int {
@@ -78,6 +91,10 @@ class KvmMethod : KvmClassMember() {
     private var _argSlotCount: Int = 0
     val argSlotCount get() = _argSlotCount
 
+    val isConstructor: Boolean get() = !isStatic && name == "<init>"
+
+    val isClinit: Boolean get() = isStatic && name == "<clinit>"
+
     fun getLineNumber(pc: Int): Int {
         if (isNative) {
             return -2
@@ -88,4 +105,37 @@ class KvmMethod : KvmClassMember() {
 
         return lineNumberTable!!.getLineNumber(pc)
     }
+
+    val parameterTypes: Array<KvmClass>?
+        get() {
+            if (_argSlotCount == 0) {
+                return null
+            }
+
+            val paramTypes = parsedDescriptor.parameterTypes
+            return Array<KvmClass>(paramTypes.size) {
+                val paramClassName = klass.toClassName(paramTypes[it])
+                klass.loader.loadClass(paramClassName)
+            }
+        }
+
+    @OptIn(ExperimentalUnsignedTypes::class)
+    val exceptionTypes: Array<KvmClass>?
+        get() {
+            if (exceptions == null) {
+                return null
+            }
+
+            val exIndexTable = exceptions!!.exceptionIndexTable!!
+            val cp = klass.constantPool
+            return Array<KvmClass>(exIndexTable.size) {
+                val classRef = cp.getConstant(exIndexTable[it].toUInt()) as KvmClassRef
+                classRef.resolvedClass
+            }
+        }
+
+    val returnType: KvmClass
+        get() = klass.run {
+            loader.loadClass(toClassName(parsedDescriptor.returnType))
+        }
 }

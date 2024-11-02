@@ -120,7 +120,7 @@ class KvmClass() {
 
     val mainMethod: KvmMethod? get() = getStaticMethod("main", "([Ljava/lang/String;)V")
 
-    private fun getStaticMethod(methodName: String, methodDescriptor: String): KvmMethod? {
+    fun getStaticMethod(methodName: String, methodDescriptor: String): KvmMethod? {
         methods.forEach { method ->
             if (method.isStatic && method.name == methodName && method.descriptor == methodDescriptor) {
                 return method
@@ -129,7 +129,7 @@ class KvmClass() {
         return null
     }
 
-    fun getClinitMethod(): KvmMethod? = getStaticMethod("<clinit>", "()V")
+    val clinitMethod: KvmMethod? get() = getStaticMethod("<clinit>", "()V")
 
     val arrayClass: KvmClass
         get() {
@@ -203,6 +203,46 @@ class KvmClass() {
             }
         }
         return null
+    }
+
+    fun getConstructors(publicOnly: Boolean): Array<KvmMethod> {
+        val list = mutableListOf<KvmMethod>()
+        methods.forEach { method ->
+            if (method.isConstructor) {
+                if (!publicOnly || method.isPublic) {
+                    list.add(method)
+                }
+            }
+        }
+        return list.toTypedArray()
+    }
+
+    fun getConstructor(descriptor: String): KvmMethod = getInstanceMethod("<init>", descriptor)!!
+
+    fun getFields(publicOnly: Boolean): Array<KvmField> {
+        if (publicOnly) {
+            val list = mutableListOf<KvmField>()
+            fields.forEach { field ->
+                if (field.isPublic) {
+                    list.add(field)
+                }
+            }
+            return list.toTypedArray()
+        } else {
+            return fields
+        }
+    }
+
+    fun getMethods(publicOnly: Boolean): Array<KvmMethod> {
+        val list = mutableListOf<KvmMethod>()
+        methods.forEach { method ->
+            if (!method.isClinit && !method.isConstructor) {
+                if (!publicOnly || method.isPublic) {
+                    list.add(method)
+                }
+            }
+        }
+        return list.toTypedArray()
     }
 
     val isJlObject: Boolean get() = name == "java/lang/Object"

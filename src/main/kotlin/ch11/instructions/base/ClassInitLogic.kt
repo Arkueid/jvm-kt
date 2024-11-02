@@ -12,7 +12,7 @@ fun initClass(thread: KvmThread, klass: KvmClass) {
     initSuperClass(thread, klass)
 }
 
-fun initSuperClass(thread: KvmThread, klass: KvmClass) {
+private fun initSuperClass(thread: KvmThread, klass: KvmClass) {
     if (!klass.isInterface) {
         val superClass = klass.superClass
         superClass?.let {
@@ -23,9 +23,9 @@ fun initSuperClass(thread: KvmThread, klass: KvmClass) {
     }
 }
 
-fun scheduleClinit(thread: KvmThread, klass: KvmClass) {
-    val clinit = klass.getClinitMethod()
-    if (clinit != null) {
+private fun scheduleClinit(thread: KvmThread, klass: KvmClass) {
+    val clinit = klass.clinitMethod
+    if (clinit != null && clinit.klass == klass) {
         // exec <clinit>
         val newFrame = thread.newFrame(clinit)
         thread.pushFrame(newFrame)

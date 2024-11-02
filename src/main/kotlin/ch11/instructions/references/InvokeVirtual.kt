@@ -7,6 +7,7 @@ import ch11.rtdata.KvmOperandStack
 import ch11.rtdata.heap.kvmStrFromJStr
 import ch11.rtdata.heap.KvmMethod
 import ch11.rtdata.heap.KvmMethodRef
+import ch11.rtdata.heap.isArray
 import ch11.rtdata.heap.isSubClassOf
 import ch11.rtdata.heap.isSuperClassOf
 import ch11.rtdata.heap.lookupMethodInClass
@@ -23,20 +24,18 @@ class INVOKE_VIRTUAL : Index16Instruction() {
 
         val ref = frame.operandStack.getRefFromTop(resolvedMethod.argSlotCount - 1)
         if (ref == null) {
-            // TODO: hack!
-            if (methodRef.name == "println") {
-                _println(frame.operandStack, methodRef.descriptor)
-                return
-            }
             throw RuntimeException("java.lang.NullPointerException")
         }
 
         if (resolvedMethod.isProtected &&
             resolvedMethod.klass.isSuperClassOf(currentClass) &&
+            resolvedMethod.klass.packageName != currentClass.packageName &&
             ref.klass != currentClass &&
             !ref.klass.isSubClassOf(currentClass)
         ) {
-            throw RuntimeException("java.lang.IllegalAccessError")
+            if (!ref.klass.isArray || resolvedMethod.name != "clone") {
+                throw RuntimeException("java.lang.IllegalAccessError")
+            }
         }
 
         val methodToBeInvoked: KvmMethod? = lookupMethodInClass(ref.klass, methodRef.name, methodRef.descriptor)

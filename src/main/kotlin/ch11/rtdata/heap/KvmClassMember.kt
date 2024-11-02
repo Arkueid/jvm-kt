@@ -8,11 +8,14 @@ open class KvmClassMember {
     lateinit var name: String
     lateinit var descriptor: String
     lateinit var klass: KvmClass
+    var signature: String? = null
+    var annotationData: ByteArray? = null
 
     fun copyMemberInfo(memberInfo: MemberInfo) {
         accessFlags = memberInfo.accessFlags
         name = memberInfo.name
         descriptor = memberInfo.descriptor
+        signature = memberInfo.signature
     }
 
     val isPublic get() = 0.toUShort() != (accessFlags and KvmAccessFlags.ACC_PUBLIC)

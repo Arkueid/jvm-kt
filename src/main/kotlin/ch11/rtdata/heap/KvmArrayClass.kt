@@ -20,6 +20,10 @@ fun KvmClass.newArray(count: Int): KvmObject {
     }
 }
 
+fun newByteArray(loader: KvmClassLoader, bytes: ByteArray): KvmObject = KvmObject(
+    loader.loadClass("[B"), data = bytes.toTypedArray()
+)
+
 val KvmClass.componentClass: KvmClass get() = loader.loadClass(getComponentClassName(name))
 
 
@@ -31,7 +35,7 @@ private fun KvmClass.getComponentClassName(className: String): String {
     throw RuntimeException("Not Array: $className")
 }
 
-private fun KvmClass.toClassName(descriptor: String): String {
+fun KvmClass.toClassName(descriptor: String): String {
     if (descriptor[0] == '[') { // array
         return descriptor
     }

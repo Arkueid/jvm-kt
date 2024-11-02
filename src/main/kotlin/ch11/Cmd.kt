@@ -22,6 +22,9 @@ class Cmd {
     @Parameter(names = ["-verboseInst"], description = "print inst info during execution")
     var verboseInstFlag: Boolean = false
 
+    @Parameter(names = ["-stackDebug"], description = "print stack info during execution")
+    var stackDebug: Boolean = false
+
     var klass: String? = null
 
     @Parameter(description = "extra arguments")

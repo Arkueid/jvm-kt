@@ -4,6 +4,7 @@ import ch11.instructions.base.Index16Instruction
 import ch11.instructions.base.initClass
 import ch11.rtdata.KvmFrame
 import ch11.rtdata.heap.KvmFieldRef
+import ch11.showStack
 
 class PUT_STATIC : Index16Instruction() {
     override fun execute(frame: KvmFrame) {
@@ -16,6 +17,7 @@ class PUT_STATIC : Index16Instruction() {
         if (!klass.initStarted) {
             frame.revertNextPC()
             initClass(frame.thread, klass)
+            return
         }
 
         if (!field.isStatic) {

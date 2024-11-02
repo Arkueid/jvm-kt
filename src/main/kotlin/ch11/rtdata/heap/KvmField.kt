@@ -1,6 +1,5 @@
 package ch11.rtdata.heap
 
-import ch11.rtdata.heap.KvmClass
 import ch11.classfile.MemberInfo
 
 class KvmField : KvmClassMember() {
@@ -28,4 +27,6 @@ class KvmField : KvmClassMember() {
     val isLongOrDouble get() = descriptor == "J" || descriptor == "D"
 
     var constantValueIndex: UInt = 0u
+
+    val type: KvmClass get() = klass.run { loader.loadClass(toClassName(descriptor)) }
 }

@@ -26,6 +26,8 @@ interface AttributeInfo {
         @JvmStatic
         fun newAttributeInfo(attrName: String, attrLen: UInt, cp: ConstantPool): AttributeInfo {
             return when (attrName) {
+//                "BootstrapMethods" ->
+
                 "Code" -> CodeAttribute(cp)
 
                 "ConstantValue" -> ConstantValueAttribute()
@@ -38,6 +40,8 @@ interface AttributeInfo {
 
                 "LocalVariableTable" -> LocalVariableTableAttribute()
 
+                "Signature" -> SignatureAttribute(cp)
+
                 "SourceFile" -> SourceFileAttribute(cp)
 
                 "Synthetic" -> SyntheticAttribute()
@@ -48,14 +52,27 @@ interface AttributeInfo {
     }
 }
 
+class SignatureAttribute(val cp: ConstantPool) : AttributeInfo {
+    private var signatureIndex: UShort = 0u
+
+    override fun readInfo(reader: ClassReader) {
+        signatureIndex = reader.readUint16()
+    }
+
+    val signature: String get() = cp.getUtf8(signatureIndex)
+
+}
+
 class UnparsedAttribute(
     var name: String,
     private var length: Int,
 ) : AttributeInfo {
-    private var info: ByteArray = ByteArray(0)
+    private var _info: ByteArray = ByteArray(0)
+
+    val info get() = _info
 
     override fun readInfo(reader: ClassReader) {
-        info = reader.readBytes(length)
+        _info = reader.readBytes(length)
     }
 
 }
@@ -167,7 +184,7 @@ class LineNumberTableAttribute : AttributeInfo {
     }
 
     fun getLineNumber(pc: Int): Int {
-        for (i in lineNumberTable.size-1 downTo 0) {
+        for (i in lineNumberTable.size - 1 downTo 0) {
             val entry = lineNumberTable[i]
             if (pc >= entry.startPc.toInt()) {
                 return entry.lineNumber.toInt()
