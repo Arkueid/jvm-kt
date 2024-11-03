@@ -54,3 +54,7 @@ cls
 @REM 测试打印字符串
 @REM aoyama7mi-jvm.bat -Xjre %JAVA_HOME%\..\jdk1.8.0_431\jre src.test.kotlin.ch08.HelloWorld -verboseClass wow sljdals sjalsl
 ```
+
+## 主要参考
+* [《自己动手写Java虚拟机》](https://github.com/zxh0/jvmgo-book)
+* [openjdk/tag:jdk8-b77](https://github.com/openjdk/jdk/tree/jdk8-b77)

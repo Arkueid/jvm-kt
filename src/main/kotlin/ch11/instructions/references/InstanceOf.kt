@@ -2,6 +2,7 @@ package ch11.instructions.references
 
 import ch11.instructions.base.Index16Instruction
 import ch11.rtdata.KvmFrame
+import ch11.rtdata.heap.KvmClass
 import ch11.rtdata.heap.KvmClassRef
 import ch11.rtdata.heap.isInstanceOf
 
@@ -22,7 +23,9 @@ class INSTANCE_OF : Index16Instruction() {
         val cp = frame.method.klass.constantPool
         val klassRef = cp.getConstant(index) as KvmClassRef
         val klass = klassRef.resolvedClass
-        if (ref.isInstanceOf(klass)) {
+
+        val ret = ref.isInstanceOf(klass)
+        if (ret) {
             stack.pushInt(1)
         } else {
             stack.pushInt(0)

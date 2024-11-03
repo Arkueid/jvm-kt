@@ -1,7 +1,7 @@
 package ch11.rtdata.heap
 
 fun KvmObject.isInstanceOf(klass: KvmClass): Boolean {
-    return klass.isAssignableFrom(klass)
+    return klass.isAssignableFrom(this.klass)
 }
 
 /**

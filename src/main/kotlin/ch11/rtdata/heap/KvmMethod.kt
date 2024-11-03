@@ -43,14 +43,13 @@ open class KvmMethod : KvmClassMember() {
     private fun injectCodeAttribute(returnType: String) {
         maxStack = 4u
         maxLocals = argSlotCount.toUInt()
-        when (returnType[0]) {
-            'V' -> code = byteArrayOf(0xfe.toByte(), 0xb1.toByte())
-            'D' -> code = byteArrayOf(0xfe.toByte(), 0xaf.toByte())
-            'F' -> code = byteArrayOf(0xfe.toByte(), 0xae.toByte())
-            'J' -> code = byteArrayOf(0xfe.toByte(), 0xad.toByte())
-            'L', '[' -> code = byteArrayOf(0xfe.toByte(), 0xb0.toByte())
-            else -> code = byteArrayOf(0xfe.toByte(), 0xac.toByte())
-
+        code = when (returnType[0]) {
+            'V' -> byteArrayOf(0xfe.toByte(), 0xb1.toByte())
+            'D' -> byteArrayOf(0xfe.toByte(), 0xaf.toByte())
+            'F' -> byteArrayOf(0xfe.toByte(), 0xae.toByte())
+            'J' -> byteArrayOf(0xfe.toByte(), 0xad.toByte())
+            'L', '[' -> byteArrayOf(0xfe.toByte(), 0xb0.toByte())
+            else -> byteArrayOf(0xfe.toByte(), 0xac.toByte())
         }
     }
 

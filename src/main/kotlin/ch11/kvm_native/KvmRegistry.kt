@@ -29,6 +29,8 @@ object KvmNative {
         ch11.kvm_native.java.lang.Runtime.init()
         ch11.kvm_native.java.lang.ClassLoader.init()
         ch11.kvm_native.java.io.WinNTFileSystem.init()
+        ch11.kvm_native.sun.misc.Signal.init()
+        ch11.kvm_native.sun.io.Win32ErrorMode.init()
     }
 
     fun register(className: String, methodName: String, methodDescriptor: String, method: NativeMethod) {

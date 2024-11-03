@@ -113,8 +113,10 @@ private fun initProperties(frame: KvmFrame) {
 private val _sysProps = mutableMapOf<String, String>(
     Pair("java.version", "1.8.0"),
     Pair("java.vendor", "jvm.go"),
-    Pair("java.vendor.url", "https://github.com/zxh0/jvm.go"),
-    Pair("java.home", "todo"),
+    Pair("java.vendor.url", "https://github.com/Arkueid/jvm-kt"),
+    Pair("java.home", ""),
+    Pair("sun.boot.library.path", ""),
+    Pair("java.library.path", ""),
     Pair("java.class.version", "52.0"),
     Pair("java.class.path", "todo"),
     Pair("java.awt.graphicsenv", "sun.awt.CGraphicsEnvironment"),

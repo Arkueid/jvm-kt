@@ -4,6 +4,7 @@ import ch11.instructions.base.Index16Instruction
 import ch11.instructions.base.invokeMethod
 import ch11.rtdata.KvmFrame
 import ch11.rtdata.KvmOperandStack
+import ch11.rtdata.heap.KvmClass
 import ch11.rtdata.heap.kvmStrFromJStr
 import ch11.rtdata.heap.KvmMethod
 import ch11.rtdata.heap.KvmMethodRef
@@ -23,6 +24,7 @@ class INVOKE_VIRTUAL : Index16Instruction() {
         }
 
         val ref = frame.operandStack.getRefFromTop(resolvedMethod.argSlotCount - 1)
+
         if (ref == null) {
             throw RuntimeException("java.lang.NullPointerException")
         }
@@ -41,7 +43,7 @@ class INVOKE_VIRTUAL : Index16Instruction() {
         val methodToBeInvoked: KvmMethod? = lookupMethodInClass(ref.klass, methodRef.name, methodRef.descriptor)
 
         if (methodToBeInvoked == null || methodToBeInvoked.isAbstract) {
-            throw RuntimeException("java.lang.AbstractMethodError")
+            throw RuntimeException("java.lang.AbstractMethodError: ${ref.klass.name}.${methodRef.name}${methodRef.descriptor}")
         }
 
         invokeMethod(frame, methodToBeInvoked)

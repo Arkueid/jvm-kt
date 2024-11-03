@@ -11,6 +11,7 @@ object Object {
         KvmNative.register("java/lang/Object", "getClass", "()Ljava/lang/Class;", ::getClass)
         KvmNative.register("java/lang/Object", "hashCode", "()I", ::hashCode)
         KvmNative.register("java/lang/Object", "clone", "()Ljava/lang/Object;", ::clone)
+        KvmNative.register("java/lang/Object", "notifyAll", "()V", ::notifyAll)
     }
 }
 
@@ -49,4 +50,8 @@ private fun myHashCode(obj: KvmObject): Int {
         hashCodeMap[obj.hashCode()] = startCode
         startCode++
     }
+}
+
+private fun notifyAll(frame: KvmFrame) {
+    // TODO
 }
